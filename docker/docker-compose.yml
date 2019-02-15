@@ -6,14 +6,16 @@ networks:
     driver: bridge
 
 services:
-  mongo:
-    image: mongo
+  db:
+    image: mysql
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: rememberer
+      MYSQL_USER: rememberer
+      MYSQL_PASSWORD: rememberer
     volumes:
-      - ./mongodb/data/db:/data/db:rw
-    ports: ['27017:27017']
+      - ./mysql:/var/lib/mysql:rw
+    ports: ['3306:3306']
     networks:
       - backend-network

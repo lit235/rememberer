@@ -1,4 +1,4 @@
-package com.amatsuka.rememberer.controllers;
+package com.amatsuka.rememberer.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
