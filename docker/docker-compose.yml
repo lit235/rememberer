@@ -1,0 +1,19 @@
+version: '3.2'
+networks:
+  backend-network:
+    driver: bridge
+  frontend-network:
+    driver: bridge
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    volumes:
+      - ./mongodb/data/db:/data/db:rw
+    ports: ['27017:27017']
+    networks:
+      - backend-network
