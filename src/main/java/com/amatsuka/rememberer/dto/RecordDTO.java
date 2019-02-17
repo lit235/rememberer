@@ -1,15 +1,17 @@
-package com.amatsuka.rememberer.requests;
+package com.amatsuka.rememberer.dto;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @RequiredArgsConstructor
-public class StoreRecord {
+public class RecordDTO {
 
     @NotBlank(message = "Text is required")
     private String text;
+
+    public RecordDTO(String text) {
+    }
 }
