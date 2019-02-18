@@ -30,6 +30,7 @@ public class RecordsService {
             throw new RecordNotStoredException(e);
         }
 
+        //TODO возвращать null а в контроллере уже обрабатывать
         if (result == null) {
             throw new RecordNotStoredException();
         }
