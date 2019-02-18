@@ -2,16 +2,20 @@ package com.amatsuka.rememberer.web;
 
 import com.amatsuka.rememberer.dto.RecordDTO;
 import com.amatsuka.rememberer.sevices.RecordsService;
+import com.amatsuka.rememberer.sevices.exceptions.RecordNotFoundException;
+import com.amatsuka.rememberer.sevices.exceptions.RecordNotStoredException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/records")
 public class RecordController {
 
@@ -22,39 +26,27 @@ public class RecordController {
         this.recordService = recordService;
     }
 
-    public void index() {
-
-    }
-
     @PostMapping
-    public @ResponseBody String store(@Valid RecordDTO recordDTO, Errors errors) {
-        boolean result = false;
-
+    public RecordDTO store(@Valid RecordDTO recordDTO, Errors errors) {
         if (errors.hasErrors()) {
-            log.error(errors.getAllErrors().toString());
-        } else {
-            result = this.recordService.storeRecord(recordDTO);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, errors.getAllErrors().toString());
         }
 
-        if (!result) {
-            return "Some store error";
+        try {
+            return this.recordService.storeRecord(recordDTO);
+        } catch (RecordNotStoredException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Record not saved", e);
         }
-
-        return "Success";
-    }
-
-    public void update() {
-
-    }
-
-    public void destroy() {
 
     }
 
     @GetMapping("{code}")
     public RecordDTO show(@PathVariable("code") String code) {
-        RecordDTO recordDTO = this.recordService.getRecordByCode(code);
+        try {
+            return this.recordService.getRecordByCode(code);
 
-        return recordDTO;
+        } catch (RecordNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Record not found", e);
+        }
     }
 }
