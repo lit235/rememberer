@@ -30,7 +30,6 @@ public class RecordsService {
             throw new RecordNotStoredException(e);
         }
 
-        //TODO возвращать null а в контроллере уже обрабатывать
         if (result == null) {
             throw new RecordNotStoredException();
         }
@@ -41,11 +40,7 @@ public class RecordsService {
     public RecordDTO getRecordByCode(String code) {
         Record record = recordsRepository.getRecordByCode(code);
 
-        if (record == null) {
-            throw new RecordNotFoundException();
-        }
-
-        return new RecordDTO(record.getText(), record.getCode());
+        return record == null ? null : new RecordDTO(record.getText(), record.getCode());
     }
 
     private String generateCode() {

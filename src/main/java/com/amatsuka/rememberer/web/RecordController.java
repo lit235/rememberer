@@ -42,11 +42,12 @@ public class RecordController {
 
     @GetMapping("{code}")
     public RecordDTO show(@PathVariable("code") String code) {
-        try {
-            return this.recordService.getRecordByCode(code);
+        RecordDTO recordDTO= this.recordService.getRecordByCode(code);
 
-        } catch (RecordNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Record not found", e);
+        if (recordDTO == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Record not found");
         }
+
+        return recordDTO;
     }
 }
