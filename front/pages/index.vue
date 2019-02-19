@@ -1,14 +1,22 @@
 <template>
-  <section>
-    <h1 class="header">Nuxt TypeScript Starter</h1>
-    <div class="cards">
-      <Card
-        v-for="person in people"
-        :key="person.id"
-        :person="person"
-      ></Card>
-    </div>
-  </section>
+  <b-container fluid>
+    <b-row>
+      <b-col></b-col>
+      <b-col>
+        <b-card no-body>
+          <b-tabs card>
+            <b-tab title="Tab 1" active>
+              <submit-record></submit-record>
+            </b-tab>
+            <b-tab title="Tab 2">
+              <restore-record></restore-record>
+            </b-tab>
+          </b-tabs>
+        </b-card>
+      </b-col>
+      <b-col></b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -16,27 +24,19 @@ import {
   Component,
   Vue
 } from "nuxt-property-decorator"
-import { State } from "vuex-class"
-import { Person } from "~/types";
-import Card from "~/components/Card.vue"
+import SubmitRecord from "~/components/SubmitRecord.vue";
+import RestoreRecord from "~/components/RestoreRecord.vue";
 
 @Component({
   components: {
-    Card
+    RestoreRecord,
+    SubmitRecord
   }
 })
 export default class extends Vue {
-  @State people: Person
 }
 </script>
 
 <style scoped>
-.header {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
 
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-}
 </style>

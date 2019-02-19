@@ -56,11 +56,20 @@ export default {
   /*
   ** Build configuration
   */
-  css: ["~/assets/css/main.css"],
-  build: {},
+  css: [
+      "~/assets/css/main.css",
+   'bootstrap/dist/css/bootstrap.css',
+   'bootstrap-vue/dist/bootstrap-vue.css'
+  ],
+  build: {
+    optimization : {
+      minimize: false
+    },
+  },
   modules: [
     "@nuxtjs/axios",
-    "~/modules/typescript.js"
+    "~/modules/typescript.js",
+    "~/modules/bootstrapVue",
   ],
   axios: {}
 }
