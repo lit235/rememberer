@@ -67,9 +67,7 @@ export default {
     },
   },
   modules: [
-    "@nuxtjs/axios",
     "~/modules/typescript.js",
     "~/modules/bootstrapVue",
-  ],
-  axios: {}
+  ]
 }
