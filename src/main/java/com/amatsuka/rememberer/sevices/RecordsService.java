@@ -1,10 +1,10 @@
 package com.amatsuka.rememberer.sevices;
 
-import com.amatsuka.rememberer.dto.RecordDTO;
+import com.amatsuka.rememberer.resources.RecordResource;
 import com.amatsuka.rememberer.entities.Record;
 import com.amatsuka.rememberer.repositories.RecordsRepository;
-import com.amatsuka.rememberer.sevices.exceptions.RecordNotFoundException;
 import com.amatsuka.rememberer.sevices.exceptions.RecordNotStoredException;
+import com.amatsuka.rememberer.web.requests.StoreRecordRequest;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,8 +20,8 @@ public class RecordsService {
         this.recordsRepository = recordsRepository;
     }
 
-    public RecordDTO storeRecord(RecordDTO recordDTO) {
-        Record record = new Record(recordDTO.getText(), this.generateCode());
+    public RecordResource storeRecord(StoreRecordRequest recordRequest) {
+        Record record = new Record(recordRequest.getText(), this.generateCode());
         Record result;
 
         try {
@@ -34,13 +34,13 @@ public class RecordsService {
             throw new RecordNotStoredException();
         }
 
-        return new RecordDTO(record.getText(), record.getCode());
+        return new RecordResource(record.getText(), record.getCode());
     }
 
-    public RecordDTO getRecordByCode(String code) {
+    public RecordResource getRecordByCode(String code) {
         Record record = recordsRepository.getRecordByCode(code);
 
-        return record == null ? null : new RecordDTO(record.getText(), record.getCode());
+        return record == null ? null : new RecordResource(record.getText(), record.getCode());
     }
 
     private String generateCode() {
