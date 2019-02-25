@@ -1,6 +1,7 @@
 package com.amatsuka.rememberer.repositories;
 
-import com.amatsuka.rememberer.entities.Record;
+import com.amatsuka.rememberer.domain.entities.Record;
+import com.amatsuka.rememberer.domain.repositories.RecordsRepository;
 import com.github.javafaker.Faker;
 import org.junit.Test;
 import org.junit.runner.RunWith;

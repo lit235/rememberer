@@ -2,14 +2,15 @@ package com.amatsuka.rememberer.resources;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
+import org.springframework.lang.Nullable;
 
 @Data
 @AllArgsConstructor
 public class RecordResource {
 
-    @NotBlank(message = "Text is required")
+    @Nullable
+    private Long id;
+
     private String text;
 
     private String code;

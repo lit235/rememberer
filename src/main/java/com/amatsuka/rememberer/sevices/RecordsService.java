@@ -1,9 +1,10 @@
 package com.amatsuka.rememberer.sevices;
 
+import com.amatsuka.rememberer.mappers.RecordMapper;
 import com.amatsuka.rememberer.resources.RecordResource;
-import com.amatsuka.rememberer.entities.Record;
-import com.amatsuka.rememberer.repositories.RecordsRepository;
-import com.amatsuka.rememberer.sevices.exceptions.RecordNotEnctyptedException;
+import com.amatsuka.rememberer.domain.entities.Record;
+import com.amatsuka.rememberer.domain.repositories.RecordsRepository;
+import com.amatsuka.rememberer.sevices.exceptions.RecordNotEncryptedException;
 import com.amatsuka.rememberer.sevices.exceptions.RecordNotStoredException;
 import com.amatsuka.rememberer.web.requests.StoreRecordRequest;
 import com.github.javafaker.Faker;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.codec.binary.Base64;
 
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.MD5;
-import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_224;
 
 @Service
 public class RecordsService {
@@ -33,8 +33,14 @@ public class RecordsService {
             recordRequest = this.encryptRecord(recordRequest);
         }
 
-        Record record = new Record(recordRequest.getText(), this.generateCode());
-        record.setPasswordHash(recordRequest.getPassword());
+        return this.storeRecord(RecordMapper.INSTANCE.storeRecordRequestToRecordResource(recordRequest));
+    }
+
+    public RecordResource storeRecord(RecordResource recordResource) {
+
+        recordResource.setCode(this.generateCode());
+        Record record = RecordMapper.INSTANCE.recordResourceToRecord(recordResource);
+
         Record result;
 
         try {
@@ -43,11 +49,7 @@ public class RecordsService {
             throw new RecordNotStoredException(e);
         }
 
-        if (result == null) {
-            throw new RecordNotStoredException();
-        }
-
-        return new RecordResource(record.getText(), record.getCode(), record.getPasswordHash());
+        return RecordMapper.INSTANCE.recordToRecordResource(result);
     }
 
     public RecordResource getRecordByCode(String code, String password) {
@@ -57,13 +59,13 @@ public class RecordsService {
             return null;
         }
 
-        RecordResource result = new RecordResource(record.getText(), record.getCode(), record.getPasswordHash());
+        RecordResource result = RecordMapper.INSTANCE.recordToRecordResource(record);
 
         //TODO что-то делать с исклбчением при ошибке расшифровки
         if (password != null && !password.isEmpty()) {
             try {
                 result = this.decryptRecord(result, password);
-            } catch (RecordNotEnctyptedException e) {
+            } catch (RecordNotEncryptedException e) {
                 return null;
             }
         }
@@ -77,7 +79,7 @@ public class RecordsService {
         return faker.funnyName().name();
     }
 
-    //TODO Разделить dto по слоям. В сервисе все должно обрабатывать RecordResource
+    //TODO выделить в отдельный севис шифровку записей
     private StoreRecordRequest encryptRecord(StoreRecordRequest record) {
         return new StoreRecordRequest(
                 new String(Base64.encodeBase64(record.getText().getBytes())),
@@ -85,14 +87,15 @@ public class RecordsService {
         );
     }
 
-    private RecordResource decryptRecord(RecordResource recordResource, String password) throws RecordNotEnctyptedException {
+    private RecordResource decryptRecord(RecordResource recordResource, String password) throws RecordNotEncryptedException {
         String passwordHash = new String(new DigestUtils(MD5).digest(password));
 
         if (!passwordHash.equals(recordResource.getPasswordHash())) {
-            throw new RecordNotEnctyptedException();
+            throw new RecordNotEncryptedException();
         }
 
         return new RecordResource(
+                recordResource.getId(),
                 new String(Base64.decodeBase64(recordResource.getText())),
                 recordResource.getCode(),
                 recordResource.getPasswordHash()

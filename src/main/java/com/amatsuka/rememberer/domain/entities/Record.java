@@ -1,4 +1,4 @@
-package com.amatsuka.rememberer.entities;
+package com.amatsuka.rememberer.domain.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
