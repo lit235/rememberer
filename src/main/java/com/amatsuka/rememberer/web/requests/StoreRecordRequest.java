@@ -11,4 +11,6 @@ public class StoreRecordRequest {
 
     @NotBlank(message = "Text is required")
     private String text;
+
+    private String password;
 }

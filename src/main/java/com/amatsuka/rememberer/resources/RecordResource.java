@@ -13,4 +13,6 @@ public class RecordResource {
     private String text;
 
     private String code;
+
+    private String passwordHash;
 }

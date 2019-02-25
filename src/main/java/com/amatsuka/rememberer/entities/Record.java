@@ -25,6 +25,9 @@ public class Record implements Serializable {
     @Column(nullable = false, unique = true, length = 20)
     private @NonNull String code;
 
+    @Column(length = 40)
+    private String passwordHash;
+
     @Column(nullable = false)
     private Date createdAt;
 

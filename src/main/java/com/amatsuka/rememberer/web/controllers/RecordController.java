@@ -40,8 +40,8 @@ public class RecordController {
     }
 
     @GetMapping("{code}")
-    public RecordResource show(@PathVariable("code") String code) {
-        RecordResource recordResource = this.recordService.getRecordByCode(code);
+    public RecordResource show(@PathVariable("code") String code, @RequestParam(value = "password", required = false) String password) {
+        RecordResource recordResource = this.recordService.getRecordByCode(code, password);
 
         if (recordResource == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Record not found");
