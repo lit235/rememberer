@@ -28,13 +28,13 @@ public class RecordsService {
     //TODO организовать логику сохраниения зашифрованных и незашифрованных данных
     public RecordResource storeRecord(StoreRecordRequest recordRequest) {
 
-        RecordResource recordResource = this.storeRecord(RecordMapper.INSTANCE.storeRecordRequestToRecordResource(recordRequest));
+        RecordResource recordResource = RecordMapper.INSTANCE.storeRecordRequestToRecordResource(recordRequest);
 
         if (recordRequest.getPassword() != null && !recordRequest.getPassword().isEmpty()) {
             recordResource = this.recordEncryptService.encrypt(recordResource, recordRequest.getPassword());
         }
 
-        return recordResource;
+        return this.storeRecord(recordResource);
     }
 
     public RecordResource storeRecord(RecordResource recordResource) {

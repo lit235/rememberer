@@ -4,10 +4,9 @@ import com.amatsuka.rememberer.domain.entities.Record;
 import com.amatsuka.rememberer.resources.RecordResource;
 import com.amatsuka.rememberer.web.requests.StoreRecordRequest;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface RecordMapper {
 
     RecordMapper INSTANCE = Mappers.getMapper( RecordMapper.class );
