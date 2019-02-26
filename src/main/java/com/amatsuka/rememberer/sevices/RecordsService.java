@@ -8,32 +8,33 @@ import com.amatsuka.rememberer.sevices.exceptions.RecordNotEncryptedException;
 import com.amatsuka.rememberer.sevices.exceptions.RecordNotStoredException;
 import com.amatsuka.rememberer.web.requests.StoreRecordRequest;
 import com.github.javafaker.Faker;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.apache.commons.codec.binary.Base64;
 
-import static org.apache.commons.codec.digest.MessageDigestAlgorithms.MD5;
 
 @Service
 public class RecordsService {
 
-    private RecordsRepository recordsRepository;
+    private final RecordsRepository recordsRepository;
+    private final RecordEncryptService recordEncryptService;
 
     @Autowired
-    public RecordsService(RecordsRepository recordsRepository) {
+    public RecordsService(RecordsRepository recordsRepository, RecordEncryptService recordEncryptService) {
         this.recordsRepository = recordsRepository;
+        this.recordEncryptService = recordEncryptService;
     }
 
     //TODO организовать логику сохраниения зашифрованных и незашифрованных данных
     public RecordResource storeRecord(StoreRecordRequest recordRequest) {
 
+        RecordResource recordResource = this.storeRecord(RecordMapper.INSTANCE.storeRecordRequestToRecordResource(recordRequest));
+
         if (recordRequest.getPassword() != null && !recordRequest.getPassword().isEmpty()) {
-            recordRequest = this.encryptRecord(recordRequest);
+            recordResource = this.recordEncryptService.encrypt(recordResource, recordRequest.getPassword());
         }
 
-        return this.storeRecord(RecordMapper.INSTANCE.storeRecordRequestToRecordResource(recordRequest));
+        return recordResource;
     }
 
     public RecordResource storeRecord(RecordResource recordResource) {
@@ -64,7 +65,7 @@ public class RecordsService {
         //TODO что-то делать с исклбчением при ошибке расшифровки
         if (password != null && !password.isEmpty()) {
             try {
-                result = this.decryptRecord(result, password);
+                result = this.recordEncryptService.decrypt(result, password);
             } catch (RecordNotEncryptedException e) {
                 return null;
             }
@@ -78,29 +79,4 @@ public class RecordsService {
 
         return faker.funnyName().name();
     }
-
-    //TODO выделить в отдельный севис шифровку записей
-    private StoreRecordRequest encryptRecord(StoreRecordRequest record) {
-        return new StoreRecordRequest(
-                new String(Base64.encodeBase64(record.getText().getBytes())),
-                new String(new DigestUtils(MD5).digest(record.getPassword()))
-        );
-    }
-
-    private RecordResource decryptRecord(RecordResource recordResource, String password) throws RecordNotEncryptedException {
-        String passwordHash = new String(new DigestUtils(MD5).digest(password));
-
-        if (!passwordHash.equals(recordResource.getPasswordHash())) {
-            throw new RecordNotEncryptedException();
-        }
-
-        return new RecordResource(
-                recordResource.getId(),
-                new String(Base64.decodeBase64(recordResource.getText())),
-                recordResource.getCode(),
-                recordResource.getPasswordHash()
-        );
-    }
-
-
 }
