@@ -2,19 +2,18 @@ package com.amatsuka.rememberer.web.controllers;
 
 import com.amatsuka.rememberer.resources.RecordResource;
 import com.amatsuka.rememberer.sevices.RecordEncryptService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
 @RunWith(SpringRunner.class)
@@ -35,16 +33,13 @@ import static org.hamcrest.Matchers.*;
 @Sql("record_controller_test_data.sql")
 public class RecordsControllerTest {
 
+    final static String ENCRYPTED_RECORD_CODE = "test_encrypted_code";
+
     @Autowired
     private MockMvc mvc;
 
     @Autowired
     private RecordEncryptService recordEncryptService;
-
-    @Before
-    public void before() {
-
-    }
 
     @Test
     public void should_store_record() throws Exception {
@@ -108,23 +103,43 @@ public class RecordsControllerTest {
     }
 
     @Test
-    public void should_give_record_by_code() {
+    public void should_give_record_by_code() throws Exception {
+        MockHttpServletRequestBuilder request = get("/record/" + "test1_code")
+                .accept(MediaType.APPLICATION_JSON);
+
+        ResultActions response = this.mvc.perform(request);
+
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$.text", is("test1")))
+                .andExpect(jsonPath("$.id", is(1)));
+    }
+
+    @Test
+    public void should_not_give_record_by_wrong_code() throws Exception {
+        MockHttpServletRequestBuilder request = get("/record/" + "wrong_code")
+                .accept(MediaType.APPLICATION_JSON);
+
+        ResultActions response = this.mvc.perform(request);
+
+        response.andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void should_give_record_with_password() throws Exception {
+        MockHttpServletRequestBuilder request = get("/record/" + ENCRYPTED_RECORD_CODE).
+                param("password", "secret")
+                .accept(MediaType.APPLICATION_JSON);
+
+        ResultActions response = this.mvc.perform(request);
+
+        response.andExpect(status().isOk());
+
 
     }
 
     @Test
-    public void should_not_give_record_by_wrong_code() {
-
-    }
-
-    @Test
-    public void should_give_record_with_password() {
-
-    }
-
-    @Test
-    public void should_not_give_record_with_wrong_password() {
-
+    public void should_not_give_record_with_wrong_password() throws Exception {
+        //TODO Дописать когда разберусь с наполнение базы для теста
     }
 }
 
