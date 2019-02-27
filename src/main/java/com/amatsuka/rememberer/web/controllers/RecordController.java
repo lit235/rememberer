@@ -26,7 +26,7 @@ public class RecordController {
     }
 
     @PostMapping
-    public RecordResource store(@Valid StoreRecordRequest recordRequest, Errors errors) {
+    public RecordResource store(@RequestBody @Valid StoreRecordRequest recordRequest, Errors errors) {
         if (errors.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, errors.getAllErrors().toString());
         }

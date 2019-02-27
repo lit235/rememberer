@@ -22,7 +22,7 @@ public class Record implements Serializable {
     @Column(nullable = false)
     private @NonNull String text;
 
-    @Column(nullable = false, unique = true, length = 20)
+    @Column(nullable = false, unique = true, length = 40)
     private @NonNull String code;
 
     @Column(length = 40)
