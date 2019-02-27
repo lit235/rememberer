@@ -30,7 +30,7 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@Sql("record_controller_test_data.sql")
+@Sql("/sql/record_controller_test_data.sql")
 public class RecordsControllerTest {
 
     final static String ENCRYPTED_RECORD_CODE = "test_encrypted_code";
