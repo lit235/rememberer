@@ -18,7 +18,7 @@ public class User {
     private long id;
 
     @Column(nullable = false)
-    private @NonNull String login;
+    private @NonNull String username;
 
     @Column(nullable = false)
     private @NonNull String name;
