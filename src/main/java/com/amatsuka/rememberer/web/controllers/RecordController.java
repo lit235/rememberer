@@ -3,6 +3,9 @@ package com.amatsuka.rememberer.web.controllers;
 import com.amatsuka.rememberer.resources.RecordResource;
 import com.amatsuka.rememberer.sevices.RecordsService;
 import com.amatsuka.rememberer.sevices.exceptions.RecordNotStoredException;
+import com.amatsuka.rememberer.web.exceptions.BadRequestException;
+import com.amatsuka.rememberer.web.exceptions.ResourceNotFoundException;
+import com.amatsuka.rememberer.web.exceptions.ValidationException;
 import com.amatsuka.rememberer.web.requests.StoreRecordRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping("/records")
-public class RecordController {
+class RecordController {
 
     private RecordsService recordService;
 
@@ -26,25 +29,25 @@ public class RecordController {
     }
 
     @PostMapping
-    public RecordResource store(@RequestBody @Valid StoreRecordRequest recordRequest, Errors errors) {
+    public RecordResource create(@RequestBody @Valid StoreRecordRequest recordRequest, Errors errors) {
         if (errors.hasErrors()) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, errors.getAllErrors().toString());
+            throw new ValidationException();
         }
 
         try {
             return this.recordService.storeRecord(recordRequest);
         } catch (RecordNotStoredException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Record not saved", e);
+            throw new BadRequestException();
         }
 
     }
 
     @GetMapping("{code}")
-    public RecordResource show(@PathVariable("code") String code, @RequestParam(value = "password", required = false) String password) {
+    public RecordResource findOneByCode(@PathVariable("code") String code, @RequestParam(value = "password", required = false) String password) {
         RecordResource recordResource = this.recordService.getRecordByCode(code, password);
 
         if (recordResource == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Record not found");
+            throw new ResourceNotFoundException();
         }
 
         return recordResource;
