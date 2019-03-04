@@ -4,6 +4,7 @@ import com.amatsuka.rememberer.domain.entities.User;
 import com.amatsuka.rememberer.domain.repositories.UsersRepository;
 import com.amatsuka.rememberer.mappers.UserMapper;
 import com.amatsuka.rememberer.resources.UserResource;
+import com.amatsuka.rememberer.sevices.exceptions.UserNotDeletedException;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotStoredException;
 import com.amatsuka.rememberer.web.requests.StoreUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,9 @@ public class UsersService {
 
         UserMapper mapper = UserMapper.INSTANCE;
 
-        return this.usersRepository.findAll().stream().map(mapper::userToUserResource).collect(Collectors.toList());
+        return this.usersRepository.findAll().stream()
+                .map(mapper::userToUserResource)
+                .collect(Collectors.toList());
     }
 
     public Optional<UserResource> findOne(Long id) {
@@ -77,14 +80,14 @@ public class UsersService {
         return this.update(UserMapper.INSTANCE.storeUserRequestToUserResource(storeUserRequest));
     }
 
-    public boolean deleteById(long id) {
+    public void deleteById(long id) {
         try {
             this.usersRepository.deleteById(id);
 
-            return true;
         } catch (EmptyResultDataAccessException e) {
-            return false;
+            throw new UserNotDeletedException();
         }
+
     }
 
 

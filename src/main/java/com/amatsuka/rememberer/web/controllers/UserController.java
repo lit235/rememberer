@@ -3,6 +3,7 @@ package com.amatsuka.rememberer.web.controllers;
 import com.amatsuka.rememberer.resources.UserResource;
 import com.amatsuka.rememberer.sevices.UsersService;
 import com.amatsuka.rememberer.sevices.exceptions.RecordNotStoredException;
+import com.amatsuka.rememberer.sevices.exceptions.UserNotDeletedException;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotStoredException;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotUpdatedException;
 import com.amatsuka.rememberer.web.exceptions.BadRequestException;
@@ -72,8 +73,13 @@ class UserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete( @PathVariable("id") Long id ){
-        if(!service.deleteById(id)) {
+
+        try {
+            service.deleteById(id);
+
+        } catch (UserNotDeletedException e) {
             throw new BadRequestException();
         }
+
     }
 }
