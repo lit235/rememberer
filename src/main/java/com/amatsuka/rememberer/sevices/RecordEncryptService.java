@@ -16,12 +16,12 @@ public class RecordEncryptService {
                 recordResource.getId(),
                 new String(Base64.encodeBase64(recordResource.getText().getBytes())),
                 recordResource.getCode(),
-                new String(new DigestUtils(MD5).digest(password))
+                DigestUtils.md5Hex(password)
         );
     }
 
     public RecordResource decrypt(RecordResource recordResource, String password) throws RecordNotEncryptedException {
-        String passwordHash = new String(new DigestUtils(MD5).digest(password));
+        String passwordHash = DigestUtils.md5Hex(password);
 
         if (!passwordHash.equals(recordResource.getPasswordHash())) {
             throw new RecordNotEncryptedException();

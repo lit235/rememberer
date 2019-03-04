@@ -16,7 +16,7 @@ import java.util.Date;
 public class Record implements Serializable {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
@@ -25,7 +25,7 @@ public class Record implements Serializable {
     @Column(nullable = false, unique = true, length = 40)
     private @NonNull String code;
 
-    @Column(length = 40)
+    @Column(length = 32)
     private String passwordHash;
 
     @Column(nullable = false)

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,7 +30,8 @@ import static org.hamcrest.Matchers.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
+//TODO какойто костыль, заменить на норм решение
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Sql("/sql/record_controller_test_data.sql")
 public class RecordsControllerTest {
 
@@ -104,7 +106,7 @@ public class RecordsControllerTest {
 
     @Test
     public void should_give_record_by_code() throws Exception {
-        MockHttpServletRequestBuilder request = get("/record/" + "test1_code")
+        MockHttpServletRequestBuilder request = get("/records/" + "test1_code")
                 .accept(MediaType.APPLICATION_JSON);
 
         ResultActions response = this.mvc.perform(request);
@@ -116,7 +118,7 @@ public class RecordsControllerTest {
 
     @Test
     public void should_not_give_record_by_wrong_code() throws Exception {
-        MockHttpServletRequestBuilder request = get("/record/" + "wrong_code")
+        MockHttpServletRequestBuilder request = get("/records/" + "wrong_code")
                 .accept(MediaType.APPLICATION_JSON);
 
         ResultActions response = this.mvc.perform(request);
@@ -126,20 +128,27 @@ public class RecordsControllerTest {
 
     @Test
     public void should_give_record_with_password() throws Exception {
-        MockHttpServletRequestBuilder request = get("/record/" + ENCRYPTED_RECORD_CODE).
+        MockHttpServletRequestBuilder request = get("/records/" + ENCRYPTED_RECORD_CODE).
                 param("password", "secret")
                 .accept(MediaType.APPLICATION_JSON);
 
         ResultActions response = this.mvc.perform(request);
 
-        response.andExpect(status().isOk());
-
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$.text", is("test text")))
+                .andExpect(jsonPath("$.id", is(4)));
 
     }
 
     @Test
     public void should_not_give_record_with_wrong_password() throws Exception {
-        //TODO Дописать когда разберусь с наполнение базы для теста
+        MockHttpServletRequestBuilder request = get("/records/" + ENCRYPTED_RECORD_CODE).
+                param("password", "worng_secret")
+                .accept(MediaType.APPLICATION_JSON);
+
+        ResultActions response = this.mvc.perform(request);
+
+        response.andExpect(status().isNotFound());
     }
 }
 
