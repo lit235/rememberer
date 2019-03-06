@@ -13,11 +13,7 @@ import java.util.Date;
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class Record implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
+public class Record extends AbstractEntity implements Serializable {
 
     @Column(nullable = false)
     private @NonNull String text;

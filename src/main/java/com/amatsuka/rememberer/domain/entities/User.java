@@ -12,10 +12,7 @@ import java.util.Date;
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long id;
+public class User extends AbstractEntity  {
 
     @Column(nullable = false)
     private @NonNull String username;

@@ -9,4 +9,8 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class StoreUserRequest {
 
+    @NotBlank(message = "Username is required")
+    private String username;
+
+    private String name;
 }

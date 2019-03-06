@@ -10,6 +10,7 @@ import com.amatsuka.rememberer.web.exceptions.BadRequestException;
 import com.amatsuka.rememberer.web.exceptions.ResourceNotFoundException;
 import com.amatsuka.rememberer.web.exceptions.ValidationException;
 import com.amatsuka.rememberer.web.requests.StoreUserRequest;
+import com.amatsuka.rememberer.web.requests.UserFilterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
@@ -31,8 +32,8 @@ class UserController {
     }
 
     @GetMapping
-    public List<UserResource> findAll() {
-        return service.findAll();
+    public List<UserResource> findAll(UserFilterRequest filterRequest) {
+        return service.findAll(filterRequest);
     }
 
     @GetMapping("{id}")
