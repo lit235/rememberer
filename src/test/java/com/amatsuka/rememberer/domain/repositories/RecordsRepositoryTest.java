@@ -57,7 +57,7 @@ public class RecordsRepositoryTest {
         this.recordsRepository.save(record);
         this.recordsRepository.save(secondRecord);
 
-        List<Record> res = this.recordsRepository.findAll();
+        this.recordsRepository.findAll();
 
     }
 
@@ -70,7 +70,7 @@ public class RecordsRepositoryTest {
 
         this.recordsRepository.save(record);
 
-        List<Record> res = this.recordsRepository.findAll();
+        this.recordsRepository.findAll();
 
         Record recordByCode = this.recordsRepository.getRecordByCode(code);
 
@@ -89,7 +89,7 @@ public class RecordsRepositoryTest {
 
         this.recordsRepository.save(record);
 
-        List<Record> res = this.recordsRepository.findAll();
+       this.recordsRepository.findAll();
 
         Record recordByCode = this.recordsRepository.getRecordByCode(worngCode);
 

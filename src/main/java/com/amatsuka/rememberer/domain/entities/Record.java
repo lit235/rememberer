@@ -13,6 +13,7 @@ import java.util.Date;
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor
+@Table(name = "records")
 public class Record extends AbstractEntity implements Serializable {
 
     @Column(nullable = false)

@@ -138,7 +138,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    void should_get_one_user() throws Exception {
+   public void should_get_one_user() throws Exception {
         MockHttpServletRequestBuilder request = get("/users/" + 1)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -150,7 +150,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    void should_get_all_users() throws Exception {
+    public void should_get_all_users() throws Exception {
         MockHttpServletRequestBuilder request = get("/users/")
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -161,7 +161,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    void should_get_all_users_with_filter_and_sorting() throws Exception {
+    public void should_get_all_users_with_filter_and_sorting() throws Exception {
         Map<String, String> params = new HashMap<String, String>() {{
             put("name", "some_name");
             put("sort_by", "username");

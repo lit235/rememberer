@@ -12,9 +12,10 @@ import java.util.Date;
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor
+@Table(name = "users")
 public class User extends AbstractEntity  {
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 20)
     private @NonNull String username;
 
     @Column
@@ -26,7 +27,7 @@ public class User extends AbstractEntity  {
     @Column(nullable = false)
     private Date createdAt;
 
-    @Column(nullable = false)
+    @Column
     private Date loginAt;
 
     @PrePersist
