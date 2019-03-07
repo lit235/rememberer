@@ -17,4 +17,12 @@ public class UserFilterRequest {
 
     private Date createdAtTo;
 
+    private Integer pageSize;
+
+    private Integer page;
+
+    private String sortBy;
+
+    private String direction;
+
 }

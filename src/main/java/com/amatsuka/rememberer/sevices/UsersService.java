@@ -16,6 +16,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +39,7 @@ public class UsersService {
 
         UserMapper mapper = UserMapper.INSTANCE;
 
-        return this.usersRepository.findAll().stream()
+        return  Lists.newArrayList(this.usersRepository.findAll()).stream()
                 .map(mapper::userToUserResource)
                 .collect(Collectors.toList());
     }
@@ -64,11 +67,29 @@ public class UsersService {
         return query;
     }
 
+    private Pageable buildPagable(UserFilterRequest filterRequest) {
+        Sort sort = Sort.by("id").ascending();
+
+        if (filterRequest.getSortBy() != null && filterRequest.getDirection() != null) {
+            sort = Sort.by(filterRequest.getSortBy());
+
+            sort = filterRequest.getDirection().equals("asc") ? sort.ascending() : sort.descending();
+        }
+
+
+        if (filterRequest.getPage() != null && filterRequest.getPageSize() != null) {
+            return PageRequest.of(filterRequest.getPage() + 1, filterRequest.getPageSize(), sort);
+        }
+
+        return PageRequest.of(0, Integer.MAX_VALUE, sort);
+    }
+
+
     public List<UserResource> findAll(UserFilterRequest filterRequest) {
 
         UserMapper mapper = UserMapper.INSTANCE;
 
-        return Lists.newArrayList(this.usersRepository.findAll(buildDslQuery(filterRequest))).stream()
+        return Lists.newArrayList(this.usersRepository.findAll(buildDslQuery(filterRequest), buildPagable(filterRequest))).stream()
                 .map(mapper::userToUserResource)
                 .collect(Collectors.toList());
     }
