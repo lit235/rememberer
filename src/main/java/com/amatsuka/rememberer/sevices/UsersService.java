@@ -105,6 +105,7 @@ public class UsersService {
     public UserResource create(UserResource userResource) {
         User user = UserMapper.INSTANCE.userResourceToUser(userResource);
 
+        //TODO если передан пароль - хешировать
         //TODO куда такое выносить
         if (user.getPasswordHash() == null) {
             user.setPasswordHash(new Faker().crypto().md5());
@@ -127,8 +128,10 @@ public class UsersService {
     }
 
     //TODO решить что делать с дублированием. В save проверяется новая ли это запись, возможно надо чекать наличие id
-    public UserResource update(UserResource userResource) {
+    public UserResource update(Long id, UserResource userResource) {
         User user = UserMapper.INSTANCE.userResourceToUser(userResource);
+        user.setId(id);
+
         User result;
 
         try {
@@ -141,8 +144,8 @@ public class UsersService {
         return UserMapper.INSTANCE.userToUserResource(result);
     }
 
-    public UserResource update(StoreUserRequest storeUserRequest) {
-        return this.update(UserMapper.INSTANCE.storeUserRequestToUserResource(storeUserRequest));
+    public UserResource update(Long id, StoreUserRequest storeUserRequest) {
+        return this.update(id, UserMapper.INSTANCE.storeUserRequestToUserResource(storeUserRequest));
     }
 
     public void deleteById(long id) {

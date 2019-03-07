@@ -14,10 +14,10 @@ import java.util.Date;
 @NoArgsConstructor
 public class User extends AbstractEntity  {
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private @NonNull String username;
 
-    @Column(nullable = false)
+    @Column
     private @NonNull String name;
 
     @Column(nullable = false)

@@ -2,7 +2,6 @@ package com.amatsuka.rememberer.web.controllers;
 
 import com.amatsuka.rememberer.resources.UserResource;
 import com.amatsuka.rememberer.sevices.UsersService;
-import com.amatsuka.rememberer.sevices.exceptions.RecordNotStoredException;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotDeletedException;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotStoredException;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotUpdatedException;
@@ -65,7 +64,7 @@ class UserController {
         }
 
         try {
-            return service.update(storeUserRequest);
+            return service.update(id, storeUserRequest);
         } catch (UserNotUpdatedException e) {
             throw new BadRequestException();
         }
