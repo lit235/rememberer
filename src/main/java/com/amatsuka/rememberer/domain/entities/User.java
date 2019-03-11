@@ -1,15 +1,15 @@
 package com.amatsuka.rememberer.domain.entities;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import io.swagger.annotations.Api;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude = "apiClients")
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
@@ -34,4 +34,5 @@ public class User extends AbstractEntity  {
     void createdAt() {
         this.createdAt = new Date();
     }
+
 }
