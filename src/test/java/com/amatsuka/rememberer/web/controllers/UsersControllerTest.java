@@ -1,5 +1,8 @@
 package com.amatsuka.rememberer.web.controllers;
 
+import com.amatsuka.rememberer.domain.entities.User;
+import com.amatsuka.rememberer.resources.UserResource;
+import com.amatsuka.rememberer.util.BaseTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
@@ -17,8 +20,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //TODO какойто костыль, заменить на норм решение
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Sql("/sql/users_controller_test_data.sql")
-public class UsersControllerTest {
+public class UsersControllerTest extends BaseTest {
 
     @Autowired
     private MockMvc mvc;
@@ -157,24 +162,34 @@ public class UsersControllerTest {
         ResultActions response = this.mvc.perform(request);
 
         response.andExpect(status().isOk());
-        //TODO проанализировать ответ на наличие всех пользователей
+        String responseContent = response.andReturn().getResponse().getContentAsString();
+        List<HashMap<String, String>> users = retrieveResourceCollectionFromResponse(responseContent);
+
+        assertThat(users.get(0).get("id"), is("1"));
+        assertThat(users.get(1).get("id"), is("2"));
+        assertThat(users.get(2).get("id"), is("3"));
+        assertThat(users.get(3).get("id"), is("4"));
     }
 
     @Test
     public void should_get_all_users_with_filter_and_sorting() throws Exception {
-        Map<String, String> params = new HashMap<String, String>() {{
-            put("name", "some_name");
-            put("sort_by", "username");
-            put("direction", "asc");
-        }};
         
         MockHttpServletRequestBuilder request = get("/users/")
+                .param("name", "some_name")
+                .param("sortBy", "id")
+                .param("direction", "desc")
                 .accept(MediaType.APPLICATION_JSON);
 
         ResultActions response = this.mvc.perform(request);
 
         response.andExpect(status().isOk());
         //TODO проанализировать ответ на наличие пользователей пользователей по фильтру и порядку
+
+        String responseContent = response.andReturn().getResponse().getContentAsString();
+        List<HashMap<String, String>> users = retrieveResourceCollectionFromResponse(responseContent);
+
+        assertThat(users.get(0).get("id"), is("4"));
+        assertThat(users.get(1).get("id"), is("3"));
     }
 }
 
