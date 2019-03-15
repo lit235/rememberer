@@ -25,7 +25,7 @@ public class User extends AbstractEntity implements UserDetails {
     @Column
     private @NonNull String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 60)
     private @NonNull String passwordHash;
 
     @Column(nullable = false)
@@ -50,26 +50,26 @@ public class User extends AbstractEntity implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return passwordHash;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
