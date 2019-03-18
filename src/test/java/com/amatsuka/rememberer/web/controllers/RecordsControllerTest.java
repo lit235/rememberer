@@ -50,7 +50,7 @@ public class RecordsControllerTest {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        MockHttpServletRequestBuilder request = post("/records")
+        MockHttpServletRequestBuilder request = post("/api/records")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(recordParams));
@@ -68,7 +68,7 @@ public class RecordsControllerTest {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        MockHttpServletRequestBuilder request = post("/records")
+        MockHttpServletRequestBuilder request = post("/api/records")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(recordParams));
@@ -90,7 +90,7 @@ public class RecordsControllerTest {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        MockHttpServletRequestBuilder request = post("/records")
+        MockHttpServletRequestBuilder request = post("/api/records")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(recordParams));
@@ -104,7 +104,7 @@ public class RecordsControllerTest {
 
     @Test
     public void should_give_record_by_code() throws Exception {
-        MockHttpServletRequestBuilder request = get("/records/" + "test1_code")
+        MockHttpServletRequestBuilder request = get("/api/records/" + "test1_code")
                 .accept(MediaType.APPLICATION_JSON);
 
         ResultActions response = this.mvc.perform(request);
@@ -116,7 +116,7 @@ public class RecordsControllerTest {
 
     @Test
     public void should_not_give_record_by_wrong_code() throws Exception {
-        MockHttpServletRequestBuilder request = get("/records/" + "wrong_code")
+        MockHttpServletRequestBuilder request = get("/api/records/" + "wrong_code")
                 .accept(MediaType.APPLICATION_JSON);
 
         ResultActions response = this.mvc.perform(request);
@@ -126,7 +126,7 @@ public class RecordsControllerTest {
 
     @Test
     public void should_give_record_with_password() throws Exception {
-        MockHttpServletRequestBuilder request = get("/records/" + ENCRYPTED_RECORD_CODE).
+        MockHttpServletRequestBuilder request = get("/api/records/" + ENCRYPTED_RECORD_CODE).
                 param("password", "secret")
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -140,7 +140,7 @@ public class RecordsControllerTest {
 
     @Test
     public void should_not_give_record_with_wrong_password() throws Exception {
-        MockHttpServletRequestBuilder request = get("/records/" + ENCRYPTED_RECORD_CODE).
+        MockHttpServletRequestBuilder request = get("/api/records/" + ENCRYPTED_RECORD_CODE).
                 param("password", "worng_secret")
                 .accept(MediaType.APPLICATION_JSON);
 

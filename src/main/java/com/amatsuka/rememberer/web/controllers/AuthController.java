@@ -22,7 +22,7 @@ import java.util.Map;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/api/admin/auth")
+@RequestMapping("/admin/auth")
 public class AuthController {
 
     @Autowired

@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             //@formatter:off
-            http
+            http.antMatcher("/api/**")
                     .httpBasic().disable()
                     .csrf().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -57,13 +57,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         protected void configure(HttpSecurity http) throws Exception {
             //@formatter:off
             http
+                    .antMatcher("/admin/**")
                     .httpBasic().disable()
                     .csrf().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/api/admin/**").authenticated()
-                    .antMatchers("/api/admin/auth/signin").permitAll()
+                    .antMatchers("/admin/**").authenticated()
+                    .antMatchers("/admin/auth/signin").permitAll()
                     .anyRequest().authenticated()
                     .and()
                     .apply(new JwtUsersConfigurer());
