@@ -1,5 +1,7 @@
-package com.amatsuka.rememberer.security;
+package com.amatsuka.rememberer.security.apiclients;
 
+import com.amatsuka.rememberer.security.InvalidJwtAuthenticationException;
+import com.amatsuka.rememberer.sevices.ApiClientsDetailsService;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class JwtTokenProvider {
+public class JwtApiClientsTokenProvider {
 
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey = "secret";
@@ -24,8 +26,11 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.expire-length:3600000}")
     private long validityInMilliseconds = 3600000; // 1h
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private ApiClientsDetailsService userDetailsService;
+
+    public JwtApiClientsTokenProvider(ApiClientsDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @PostConstruct
     protected void init() {

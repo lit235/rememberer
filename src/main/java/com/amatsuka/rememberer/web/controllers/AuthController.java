@@ -1,7 +1,7 @@
 package com.amatsuka.rememberer.web.controllers;
 
 import com.amatsuka.rememberer.domain.repositories.UsersRepository;
-import com.amatsuka.rememberer.security.JwtTokenProvider;
+import com.amatsuka.rememberer.security.users.JwtUsersTokenProvider;
 import com.amatsuka.rememberer.web.requests.AuthenticationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +22,14 @@ import java.util.Map;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/admin/auth")
 public class AuthController {
 
     @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    JwtUsersTokenProvider jwtTokenProvider;
 
     @Autowired
     UsersRepository users;
@@ -41,7 +41,11 @@ public class AuthController {
 
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
 
-            String token = jwtTokenProvider.createToken(username, this.users.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
+            String token = jwtTokenProvider.createToken(
+                    username,
+                    this.users.findByUsername(username).orElseThrow(
+                            () -> new UsernameNotFoundException("Username " + username + "not found")
+                    ).getRoles());
 
             Map<Object, Object> model = new HashMap<>();
             model.put("username", username);

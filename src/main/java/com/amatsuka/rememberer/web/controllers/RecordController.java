@@ -18,7 +18,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping("/records")
+@RequestMapping("/api/records")
 class RecordController {
 
     private RecordsService recordService;

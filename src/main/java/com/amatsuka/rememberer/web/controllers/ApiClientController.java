@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/clients")
+@RequestMapping("/api/admin/clients")
 class ApiClientController {
 
     private ApiClientsService service;

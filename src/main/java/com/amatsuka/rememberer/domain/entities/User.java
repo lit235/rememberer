@@ -1,13 +1,15 @@
 package com.amatsuka.rememberer.domain.entities;
 
-import io.swagger.annotations.Api;
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,18 +36,18 @@ public class User extends AbstractEntity implements UserDetails {
     @Column
     private Date loginAt;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
-
     @PrePersist
     void createdAt() {
         this.createdAt = new Date();
     }
 
+    public List<String> getRoles() {
+        return new ArrayList<>();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
+        return new ArrayList<>();
     }
 
     @Override
