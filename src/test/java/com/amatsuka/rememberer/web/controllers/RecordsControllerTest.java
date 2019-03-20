@@ -5,6 +5,7 @@ import com.amatsuka.rememberer.resources.ApiClientResource;
 import com.amatsuka.rememberer.resources.RecordResource;
 import com.amatsuka.rememberer.sevices.ApiClientsService;
 import com.amatsuka.rememberer.sevices.RecordEncryptService;
+import com.amatsuka.rememberer.util.BaseTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import org.junit.Before;
@@ -36,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //TODO какойто костыль, заменить на норм решение
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Sql("/sql/record_controller_test_data.sql")
-public class RecordsControllerTest {
+public class RecordsControllerTest extends BaseTest {
 
     final static String ENCRYPTED_RECORD_CODE = "test_encrypted_code";
 
@@ -59,10 +60,6 @@ public class RecordsControllerTest {
         apiToken = apiClientsService.generateToken(apiClientResource);
     }
 
-    public MockHttpServletRequestBuilder appendAuthorizationToken(MockHttpServletRequestBuilder request) {
-        return request.header("Authorization", "Bearer " + apiToken);
-    }
-
     @Test
     public void should_store_record() throws Exception {
 
@@ -77,7 +74,7 @@ public class RecordsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(recordParams));
 
-        request = appendAuthorizationToken(request);
+        request = appendAuthorizationToken(request, apiToken);
 
         ResultActions response = this.mvc.perform(request);
 
@@ -97,7 +94,7 @@ public class RecordsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(recordParams));
 
-        request = appendAuthorizationToken(request);
+        request = appendAuthorizationToken(request, apiToken);
 
         ResultActions response = this.mvc.perform(request);
 
@@ -121,7 +118,7 @@ public class RecordsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(recordParams));
 
-        request = appendAuthorizationToken(request);
+        request = appendAuthorizationToken(request, apiToken);
 
         ResultActions response = this.mvc.perform(request);
 
@@ -135,7 +132,7 @@ public class RecordsControllerTest {
         MockHttpServletRequestBuilder request = get("/api/records/" + "test1_code")
                 .accept(MediaType.APPLICATION_JSON);
 
-        request = appendAuthorizationToken(request);
+        request = appendAuthorizationToken(request, apiToken);
 
         ResultActions response = this.mvc.perform(request);
 
@@ -149,7 +146,7 @@ public class RecordsControllerTest {
         MockHttpServletRequestBuilder request = get("/api/records/" + "wrong_code")
                 .accept(MediaType.APPLICATION_JSON);
 
-        request = appendAuthorizationToken(request);
+        request = appendAuthorizationToken(request, apiToken);
 
         ResultActions response = this.mvc.perform(request);
 
@@ -162,7 +159,7 @@ public class RecordsControllerTest {
                 param("password", "secret")
                 .accept(MediaType.APPLICATION_JSON);
 
-        request = appendAuthorizationToken(request);
+        request = appendAuthorizationToken(request, apiToken);
 
         ResultActions response = this.mvc.perform(request);
 
@@ -178,7 +175,7 @@ public class RecordsControllerTest {
                 param("password", "worng_secret")
                 .accept(MediaType.APPLICATION_JSON);
 
-        request = appendAuthorizationToken(request);
+        request = appendAuthorizationToken(request, apiToken);
 
         ResultActions response = this.mvc.perform(request);
 
