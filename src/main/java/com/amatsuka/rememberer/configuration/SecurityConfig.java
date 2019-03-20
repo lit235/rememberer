@@ -1,6 +1,5 @@
 package com.amatsuka.rememberer.configuration;
 
-import com.amatsuka.rememberer.security.apiclients.JwtApiClientsConfigurer;
 import com.amatsuka.rememberer.security.users.JwtUsersConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -19,7 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
@@ -45,9 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/api/records/**").authenticated()
+                    .antMatchers("/api/**").hasRole("API_CLIENT")
                     .and()
-                    .apply(new JwtApiClientsConfigurer());
+                    .apply(new JwtUsersConfigurer());
             //@formatter:on
         }
     }
@@ -69,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                     .antMatchers("/admin/auth/signin").permitAll()
                     .antMatchers("/admin/auth/signup").permitAll()
-                    .antMatchers("/admin/**").authenticated()
+                    .antMatchers("/admin/**").hasRole("USER")
                     .anyRequest().authenticated()
                     .and()
                     .apply(new JwtUsersConfigurer());

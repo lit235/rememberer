@@ -46,7 +46,7 @@ public class AuthControllerTest {
     @Test
     public void should_register_user() throws Exception {
         Map<String, String> params = new HashMap<String, String>() {{
-            put("username", "username");
+            put("username", "newusername");
             put("password", "secret");
         }};
 
@@ -60,7 +60,7 @@ public class AuthControllerTest {
         ResultActions response = this.mvc.perform(request);
 
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.username", is("username")));
+                .andExpect(jsonPath("$.username", is("newusername")));
     }
 
     @Test

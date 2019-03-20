@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 @Entity
@@ -42,7 +43,7 @@ public class User extends AbstractEntity implements UserDetails {
     }
 
     public List<String> getRoles() {
-        return new ArrayList<>();
+        return asList("USER");
     }
 
     @Override
