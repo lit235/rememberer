@@ -25,7 +25,7 @@ public class User extends AbstractEntity implements UserDetails {
     private @NonNull String username;
 
     @Column
-    private @NonNull String name;
+    private String name;
 
     @Column(nullable = false, length = 60)
     private @NonNull String passwordHash;

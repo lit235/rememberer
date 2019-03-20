@@ -105,12 +105,6 @@ public class UsersService {
     public UserResource create(UserResource userResource) {
         User user = UserMapper.INSTANCE.userResourceToUser(userResource);
 
-        //TODO если передан пароль - хешировать
-        //TODO куда такое выносить
-        if (user.getPasswordHash() == null) {
-            user.setPasswordHash(new Faker().crypto().md5());
-        }
-
         User result;
 
         try {

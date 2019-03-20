@@ -1,7 +1,11 @@
 package com.amatsuka.rememberer.web.controllers;
 
 import com.amatsuka.rememberer.domain.repositories.UsersRepository;
+import com.amatsuka.rememberer.resources.UserResource;
 import com.amatsuka.rememberer.security.users.JwtUsersTokenProvider;
+import com.amatsuka.rememberer.sevices.UsersService;
+import com.amatsuka.rememberer.sevices.exceptions.UserNotStoredException;
+import com.amatsuka.rememberer.web.exceptions.BadRequestException;
 import com.amatsuka.rememberer.web.requests.AuthenticationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +13,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +40,13 @@ public class AuthController {
     @Autowired
     UsersRepository users;
 
-    @PostMapping("/signin")
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UsersService usersService;
+
+    @PostMapping("signin")
     public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
         try {
             String username = data.getUsername();
@@ -54,6 +66,22 @@ public class AuthController {
 
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username/password supplied");
+        }
+    }
+
+    @PostMapping("signup")
+    public UserResource signup(@RequestBody AuthenticationRequest data) {
+        try {
+            String username = data.getUsername();
+            String password = data.getPassword();
+            String encryptedPassword = passwordEncoder.encode(password);
+
+            UserResource userResource = UserResource.builder().username(username).passwordHash(encryptedPassword).build();
+
+            return this.usersService.create(userResource);
+
+        } catch (UserNotStoredException e) {
+            throw new BadRequestException();
         }
     }
 }

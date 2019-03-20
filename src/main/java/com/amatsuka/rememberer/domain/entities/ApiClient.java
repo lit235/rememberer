@@ -24,9 +24,6 @@ public class ApiClient extends AbstractEntity implements UserDetails {
     @Column(nullable = false, unique = true, length = 40)
     private @NonNull String clientId;
 
-    @Column(nullable = false, unique = true, length = 40)
-    private @NonNull String clientSecret;
-
     @Column(nullable = false)
     private Date createdAt;
 
@@ -39,7 +36,7 @@ public class ApiClient extends AbstractEntity implements UserDetails {
     }
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public List<String> getRoles() {

@@ -1,9 +1,6 @@
 package com.amatsuka.rememberer.web.controllers;
 
-import com.amatsuka.rememberer.domain.entities.User;
-import com.amatsuka.rememberer.resources.UserResource;
 import com.amatsuka.rememberer.util.BaseTest;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import org.junit.Test;

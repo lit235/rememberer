@@ -4,6 +4,7 @@ import com.amatsuka.rememberer.domain.entities.ApiClient;
 import com.amatsuka.rememberer.domain.repositories.ApiClientsRepository;
 import com.amatsuka.rememberer.mappers.ApiClientMapper;
 import com.amatsuka.rememberer.resources.ApiClientResource;
+import com.amatsuka.rememberer.security.users.JwtUsersTokenProvider;
 import com.amatsuka.rememberer.sevices.exceptions.ApiClientNotDeletedException;
 import com.amatsuka.rememberer.sevices.exceptions.ApiClientNotStoredException;
 import com.amatsuka.rememberer.web.requests.StoreApiClientRequest;
@@ -11,6 +12,7 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +22,14 @@ import java.util.stream.Collectors;
 @Service
 public class ApiClientsService {
 
+    private final JwtUsersTokenProvider jwtTokenProvider;
+
+
     private final ApiClientsRepository apiClientsRepository;
 
     @Autowired
-    public ApiClientsService(ApiClientsRepository apiClientsRepository) {
+    public ApiClientsService(JwtUsersTokenProvider jwtTokenProvider, ApiClientsRepository apiClientsRepository) {
+        this.jwtTokenProvider = jwtTokenProvider;
         this.apiClientsRepository = apiClientsRepository;
     }
 
@@ -94,6 +100,14 @@ public class ApiClientsService {
             throw new ApiClientNotDeletedException();
         }
 
+    }
+
+    public String generateToken(ApiClientResource apiClientResource) {
+        return jwtTokenProvider.createToken(
+                apiClientResource.getClientId(),
+                this.apiClientsRepository.findByClientId(apiClientResource.getClientId()).orElseThrow(
+                        () -> new UsernameNotFoundException("Username " + apiClientResource.getClientId() + "not found")
+                ).getRoles());
     }
 
 

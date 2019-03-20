@@ -27,6 +27,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationManager();
     }
 
+    @Bean PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
     @Configuration
     @Order(1)
@@ -63,8 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/admin/**").authenticated()
                     .antMatchers("/admin/auth/signin").permitAll()
+                    .antMatchers("/admin/auth/signup").permitAll()
+                    .antMatchers("/admin/**").authenticated()
                     .anyRequest().authenticated()
                     .and()
                     .apply(new JwtUsersConfigurer());
