@@ -3,13 +3,12 @@ package com.amatsuka.rememberer.sevices;
 import com.amatsuka.rememberer.domain.entities.QUser;
 import com.amatsuka.rememberer.domain.entities.User;
 import com.amatsuka.rememberer.domain.repositories.UsersRepository;
+import com.amatsuka.rememberer.dto.UserDto;
 import com.amatsuka.rememberer.mappers.UserMapper;
-import com.amatsuka.rememberer.resources.UserResource;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotDeletedException;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotStoredException;
 import com.amatsuka.rememberer.web.requests.StoreUserRequest;
 import com.amatsuka.rememberer.web.requests.UserFilterRequest;
-import com.github.javafaker.Faker;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -35,7 +34,7 @@ public class UsersService {
         this.usersRepository = usersRepository;
     }
 
-    public List<UserResource> findAll() {
+    public List<UserDto> findAll() {
 
         UserMapper mapper = UserMapper.INSTANCE;
 
@@ -85,7 +84,7 @@ public class UsersService {
     }
 
 
-    public List<UserResource> findAll(UserFilterRequest filterRequest) {
+    public List<UserDto> findAll(UserFilterRequest filterRequest) {
 
         UserMapper mapper = UserMapper.INSTANCE;
 
@@ -94,7 +93,7 @@ public class UsersService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<UserResource> findOne(Long id) {
+    public Optional<UserDto> findOne(Long id) {
         Optional<User> user = this.usersRepository.findById(id);
 
         UserMapper mapper = UserMapper.INSTANCE;
@@ -102,8 +101,8 @@ public class UsersService {
         return user.map(mapper::userToUserResource);
     }
 
-    public UserResource create(UserResource userResource) {
-        User user = UserMapper.INSTANCE.userResourceToUser(userResource);
+    public UserDto create(UserDto userDto) {
+        User user = UserMapper.INSTANCE.userResourceToUser(userDto);
 
         User result;
 
@@ -117,13 +116,13 @@ public class UsersService {
         return UserMapper.INSTANCE.userToUserResource(result);
     }
 
-    public UserResource create(StoreUserRequest storeUserRequest) {
+    public UserDto create(StoreUserRequest storeUserRequest) {
        return create(UserMapper.INSTANCE.storeUserRequestToUserResource(storeUserRequest));
     }
 
     //TODO решить что делать с дублированием. В save проверяется новая ли это запись, возможно надо чекать наличие id
-    public UserResource update(Long id, UserResource userResource) {
-        User user = UserMapper.INSTANCE.userResourceToUser(userResource);
+    public UserDto update(Long id, UserDto userDto) {
+        User user = UserMapper.INSTANCE.userResourceToUser(userDto);
         user.setId(id);
 
         User result;
@@ -138,7 +137,7 @@ public class UsersService {
         return UserMapper.INSTANCE.userToUserResource(result);
     }
 
-    public UserResource update(Long id, StoreUserRequest storeUserRequest) {
+    public UserDto update(Long id, StoreUserRequest storeUserRequest) {
         return this.update(id, UserMapper.INSTANCE.storeUserRequestToUserResource(storeUserRequest));
     }
 

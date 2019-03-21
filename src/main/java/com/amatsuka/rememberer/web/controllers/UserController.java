@@ -1,6 +1,6 @@
 package com.amatsuka.rememberer.web.controllers;
 
-import com.amatsuka.rememberer.resources.UserResource;
+import com.amatsuka.rememberer.dto.UserDto;
 import com.amatsuka.rememberer.sevices.UsersService;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotDeletedException;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotStoredException;
@@ -31,55 +31,44 @@ class UserController {
     }
 
     @GetMapping
-    public List<UserResource> findAll(UserFilterRequest filterRequest) {
+    public List<UserDto> findAll(UserFilterRequest filterRequest) {
         return service.findAll(filterRequest);
     }
 
     @GetMapping("{id}")
-    public UserResource findOne(@PathVariable("id") Long id) {
-        Optional<UserResource> userResourceOptional = service.findOne(id);
+    public UserDto findOne(@PathVariable("id") Long id) {
+
+        Optional<UserDto> userResourceOptional = service.findOne(id);
 
         return userResourceOptional.orElseThrow(ResourceNotFoundException::new);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResource create(@RequestBody @Valid StoreUserRequest storeUserRequest, Errors errors) {
+    public UserDto create(@RequestBody @Valid StoreUserRequest storeUserRequest, Errors errors) {
+
         if (errors.hasErrors()) {
             throw new ValidationException();
         }
 
-        try {
-            return service.create(storeUserRequest);
-        } catch (UserNotStoredException e) {
-            throw new BadRequestException();
-        }
+        return service.create(storeUserRequest);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public UserResource update(@PathVariable("id") Long id, @RequestBody @Valid StoreUserRequest storeUserRequest, Errors errors) {
+    public UserDto update(@PathVariable("id") Long id, @RequestBody @Valid StoreUserRequest storeUserRequest, Errors errors) {
+
         if (errors.hasErrors()) {
             throw new ValidationException();
         }
 
-        try {
-            return service.update(id, storeUserRequest);
-        } catch (UserNotUpdatedException e) {
-            throw new BadRequestException();
-        }
+        return service.update(id, storeUserRequest);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete( @PathVariable("id") Long id ){
+    public void delete( @PathVariable("id") Long id ) {
 
-        try {
-            service.deleteById(id);
-
-        } catch (UserNotDeletedException e) {
-            throw new BadRequestException();
-        }
-
+        service.deleteById(id);
     }
 }

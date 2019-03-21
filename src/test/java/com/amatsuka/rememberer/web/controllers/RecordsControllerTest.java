@@ -1,13 +1,11 @@
 package com.amatsuka.rememberer.web.controllers;
 
-import com.amatsuka.rememberer.domain.entities.ApiClient;
-import com.amatsuka.rememberer.resources.ApiClientResource;
-import com.amatsuka.rememberer.resources.RecordResource;
+import com.amatsuka.rememberer.dto.ApiClientDto;
+import com.amatsuka.rememberer.dto.RecordDto;
 import com.amatsuka.rememberer.sevices.ApiClientsService;
 import com.amatsuka.rememberer.sevices.RecordEncryptService;
 import com.amatsuka.rememberer.util.BaseTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.Api;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,10 +52,10 @@ public class RecordsControllerTest extends BaseTest {
 
     @Before
     public void beforeTest() {
-        ApiClientResource apiClientResource = ApiClientResource.builder().clientId("testclientid").name("testclient").build();
-        apiClientResource = apiClientsService.create(apiClientResource);
+        ApiClientDto apiClientDto = ApiClientDto.builder().clientId("testclientid").name("testclient").build();
+        apiClientDto = apiClientsService.create(apiClientDto);
 
-        apiToken = apiClientsService.generateToken(apiClientResource);
+        apiToken = apiClientsService.generateToken(apiClientDto);
     }
 
     @Test
@@ -108,8 +106,8 @@ public class RecordsControllerTest extends BaseTest {
             put("password", "secret");
         }};
 
-       RecordResource resource = new RecordResource(null, recordParams.get("text"), null, null);
-        RecordResource encryptedRecord = this.recordEncryptService.encrypt(resource, recordParams.get("password"));
+       RecordDto resource = new RecordDto(null, recordParams.get("text"), null, null);
+        RecordDto encryptedRecord = this.recordEncryptService.encrypt(resource, recordParams.get("password"));
 
         ObjectMapper mapper = new ObjectMapper();
 

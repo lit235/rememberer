@@ -1,4 +1,4 @@
-package com.amatsuka.rememberer.resources;
+package com.amatsuka.rememberer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserResource {
+public class ApiClientDto {
     private Long id;
 
     private String name;
 
-    private String username;
-
-    private String passwordHash;
+    private String clientId;
 }

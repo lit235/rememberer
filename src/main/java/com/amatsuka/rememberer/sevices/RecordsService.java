@@ -1,7 +1,7 @@
 package com.amatsuka.rememberer.sevices;
 
+import com.amatsuka.rememberer.dto.RecordDto;
 import com.amatsuka.rememberer.mappers.RecordMapper;
-import com.amatsuka.rememberer.resources.RecordResource;
 import com.amatsuka.rememberer.domain.entities.Record;
 import com.amatsuka.rememberer.domain.repositories.RecordsRepository;
 import com.amatsuka.rememberer.sevices.exceptions.RecordNotEncryptedException;
@@ -26,21 +26,21 @@ public class RecordsService {
     }
 
     //TODO организовать логику сохраниения зашифрованных и незашифрованных данных
-    public RecordResource storeRecord(StoreRecordRequest recordRequest) {
+    public RecordDto storeRecord(StoreRecordRequest recordRequest) {
 
-        RecordResource recordResource = RecordMapper.INSTANCE.storeRecordRequestToRecordResource(recordRequest);
+        RecordDto recordDto = RecordMapper.INSTANCE.storeRecordRequestToRecordResource(recordRequest);
 
         if (recordRequest.getPassword() != null && !recordRequest.getPassword().isEmpty()) {
-            recordResource = this.recordEncryptService.encrypt(recordResource, recordRequest.getPassword());
+            recordDto = this.recordEncryptService.encrypt(recordDto, recordRequest.getPassword());
         }
 
-        return this.storeRecord(recordResource);
+        return this.storeRecord(recordDto);
     }
 
-    public RecordResource storeRecord(RecordResource recordResource) {
+    public RecordDto storeRecord(RecordDto recordDto) {
 
-        recordResource.setCode(this.generateCode());
-        Record record = RecordMapper.INSTANCE.recordResourceToRecord(recordResource);
+        recordDto.setCode(this.generateCode());
+        Record record = RecordMapper.INSTANCE.recordResourceToRecord(recordDto);
 
         Record result;
 
@@ -53,14 +53,14 @@ public class RecordsService {
         return RecordMapper.INSTANCE.recordToRecordResource(result);
     }
 
-    public RecordResource getRecordByCode(String code, String password) {
+    public RecordDto getRecordByCode(String code, String password) {
         Record record = recordsRepository.getRecordByCode(code);
 
         if (record == null) {
             return null;
         }
 
-        RecordResource result = RecordMapper.INSTANCE.recordToRecordResource(record);
+        RecordDto result = RecordMapper.INSTANCE.recordToRecordResource(record);
 
         //TODO что-то делать с исклбчением при ошибке расшифровки
         if (password != null && !password.isEmpty()) {

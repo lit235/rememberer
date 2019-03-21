@@ -1,4 +1,4 @@
-package com.amatsuka.rememberer.resources;
+package com.amatsuka.rememberer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecordResource {
+public class RecordDto {
 
     private Long id;
 
