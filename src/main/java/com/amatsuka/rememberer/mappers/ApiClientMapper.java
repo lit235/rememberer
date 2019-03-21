@@ -9,8 +9,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface ApiClientMapper {
 
-    ApiClientMapper INSTANCE = Mappers.getMapper( ApiClientMapper.class );
-
     ApiClientDto apiClientToApiClientResource(ApiClient apiClient);
 
     ApiClient apiClientResourceToApiClient(ApiClientDto apiClientDto);

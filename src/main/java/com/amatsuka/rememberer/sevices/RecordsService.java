@@ -17,18 +17,22 @@ import org.springframework.stereotype.Service;
 public class RecordsService {
 
     private final RecordsRepository recordsRepository;
+    
     private final RecordEncryptService recordEncryptService;
+    
+    private final RecordMapper recordMapper;
 
     @Autowired
-    public RecordsService(RecordsRepository recordsRepository, RecordEncryptService recordEncryptService) {
+    public RecordsService(RecordsRepository recordsRepository, RecordEncryptService recordEncryptService, RecordMapper recordMapper) {
         this.recordsRepository = recordsRepository;
         this.recordEncryptService = recordEncryptService;
+        this.recordMapper = recordMapper;
     }
 
     //TODO организовать логику сохраниения зашифрованных и незашифрованных данных
     public RecordDto storeRecord(StoreRecordRequest recordRequest) {
 
-        RecordDto recordDto = RecordMapper.INSTANCE.storeRecordRequestToRecordResource(recordRequest);
+        RecordDto recordDto = recordMapper.storeRecordRequestToRecordResource(recordRequest);
 
         if (recordRequest.getPassword() != null && !recordRequest.getPassword().isEmpty()) {
             recordDto = this.recordEncryptService.encrypt(recordDto, recordRequest.getPassword());
@@ -40,7 +44,7 @@ public class RecordsService {
     public RecordDto storeRecord(RecordDto recordDto) {
 
         recordDto.setCode(this.generateCode());
-        Record record = RecordMapper.INSTANCE.recordResourceToRecord(recordDto);
+        Record record = recordMapper.recordResourceToRecord(recordDto);
 
         Record result;
 
@@ -50,7 +54,7 @@ public class RecordsService {
             throw new RecordNotStoredException(e);
         }
 
-        return RecordMapper.INSTANCE.recordToRecordResource(result);
+        return recordMapper.recordToRecordResource(result);
     }
 
     public RecordDto getRecordByCode(String code, String password) {
@@ -60,7 +64,7 @@ public class RecordsService {
             return null;
         }
 
-        RecordDto result = RecordMapper.INSTANCE.recordToRecordResource(record);
+        RecordDto result = recordMapper.recordToRecordResource(record);
 
         //TODO что-то делать с исклбчением при ошибке расшифровки
         if (password != null && !password.isEmpty()) {

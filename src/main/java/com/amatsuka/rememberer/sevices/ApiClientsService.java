@@ -24,35 +24,34 @@ public class ApiClientsService {
 
     private final JwtUsersTokenProvider jwtTokenProvider;
 
-
     private final ApiClientsRepository apiClientsRepository;
 
+    private final ApiClientMapper apiClientMapper;
+    
     @Autowired
-    public ApiClientsService(JwtUsersTokenProvider jwtTokenProvider, ApiClientsRepository apiClientsRepository) {
+    public ApiClientsService(JwtUsersTokenProvider jwtTokenProvider, ApiClientsRepository apiClientsRepository, ApiClientMapper apiClientMapper) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.apiClientsRepository = apiClientsRepository;
+        this.apiClientMapper = apiClientMapper;
     }
 
     public List<ApiClientDto> findAll() {
 
-        ApiClientMapper mapper = ApiClientMapper.INSTANCE;
 
         return  Lists.newArrayList(this.apiClientsRepository.findAll()).stream()
-                .map(mapper::apiClientToApiClientResource)
+                .map(apiClientMapper::apiClientToApiClientResource)
                 .collect(Collectors.toList());
     }
 
 
     public Optional<ApiClientDto> findOne(Long id) {
         Optional<ApiClient> apiClient = this.apiClientsRepository.findById(id);
-
-        ApiClientMapper mapper = ApiClientMapper.INSTANCE;
-
-        return apiClient.map(mapper::apiClientToApiClientResource);
+        
+        return apiClient.map(apiClientMapper::apiClientToApiClientResource);
     }
 
     public ApiClientDto create(ApiClientDto ApiClientDto) {
-        ApiClient apiClient = ApiClientMapper.INSTANCE.apiClientResourceToApiClient(ApiClientDto);
+        ApiClient apiClient = apiClientMapper.apiClientResourceToApiClient(ApiClientDto);
 
 
         ApiClient result;
@@ -64,16 +63,16 @@ public class ApiClientsService {
             throw new ApiClientNotStoredException(e);
         }
 
-        return ApiClientMapper.INSTANCE.apiClientToApiClientResource(result);
+        return apiClientMapper.apiClientToApiClientResource(result);
     }
 
     public ApiClientDto create(StoreApiClientRequest storeApiClientRequest) {
-       return create(ApiClientMapper.INSTANCE.storeApiClientRequestToApiClientResource(storeApiClientRequest));
+       return create(apiClientMapper.storeApiClientRequestToApiClientResource(storeApiClientRequest));
     }
 
     //TODO решить что делать с дублированием. В save проверяется новая ли это запись, возможно надо чекать наличие id
     public ApiClientDto update(Long id, ApiClientDto ApiClientDto) {
-        ApiClient apiClient = ApiClientMapper.INSTANCE.apiClientResourceToApiClient(ApiClientDto);
+        ApiClient apiClient = apiClientMapper.apiClientResourceToApiClient(ApiClientDto);
         apiClient.setId(id);
 
         ApiClient result;
@@ -85,11 +84,11 @@ public class ApiClientsService {
             throw new ApiClientNotStoredException(e);
         }
 
-        return ApiClientMapper.INSTANCE.apiClientToApiClientResource(result);
+        return apiClientMapper.apiClientToApiClientResource(result);
     }
 
     public ApiClientDto update(Long id, StoreApiClientRequest storeApiClientRequest) {
-        return this.update(id, ApiClientMapper.INSTANCE.storeApiClientRequestToApiClientResource(storeApiClientRequest));
+        return this.update(id, apiClientMapper.storeApiClientRequestToApiClientResource(storeApiClientRequest));
     }
 
     public void deleteById(long id) {

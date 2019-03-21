@@ -28,18 +28,19 @@ import java.util.stream.Collectors;
 public class UsersService {
 
     private final UsersRepository usersRepository;
+    
+    private final UserMapper userMapper;
 
     @Autowired
-    public UsersService(UsersRepository usersRepository) {
+    public UsersService(UsersRepository usersRepository, UserMapper userMapper) {
         this.usersRepository = usersRepository;
+        this.userMapper = userMapper;
     }
 
     public List<UserDto> findAll() {
-
-        UserMapper mapper = UserMapper.INSTANCE;
-
+        
         return  Lists.newArrayList(this.usersRepository.findAll()).stream()
-                .map(mapper::userToUserResource)
+                .map(userMapper::userToUserResource)
                 .collect(Collectors.toList());
     }
 
@@ -85,24 +86,20 @@ public class UsersService {
 
 
     public List<UserDto> findAll(UserFilterRequest filterRequest) {
-
-        UserMapper mapper = UserMapper.INSTANCE;
-
+        
         return Lists.newArrayList(this.usersRepository.findAll(buildDslQuery(filterRequest), buildPagable(filterRequest))).stream()
-                .map(mapper::userToUserResource)
+                .map(userMapper::userToUserResource)
                 .collect(Collectors.toList());
     }
 
     public Optional<UserDto> findOne(Long id) {
         Optional<User> user = this.usersRepository.findById(id);
-
-        UserMapper mapper = UserMapper.INSTANCE;
-
-        return user.map(mapper::userToUserResource);
+        
+        return user.map(userMapper::userToUserResource);
     }
 
     public UserDto create(UserDto userDto) {
-        User user = UserMapper.INSTANCE.userResourceToUser(userDto);
+        User user = userMapper.userResourceToUser(userDto);
 
         User result;
 
@@ -113,16 +110,16 @@ public class UsersService {
             throw new UserNotStoredException(e);
         }
 
-        return UserMapper.INSTANCE.userToUserResource(result);
+        return userMapper.userToUserResource(result);
     }
 
     public UserDto create(StoreUserRequest storeUserRequest) {
-       return create(UserMapper.INSTANCE.storeUserRequestToUserResource(storeUserRequest));
+       return create(userMapper.storeUserRequestToUserResource(storeUserRequest));
     }
 
     //TODO решить что делать с дублированием. В save проверяется новая ли это запись, возможно надо чекать наличие id
     public UserDto update(Long id, UserDto userDto) {
-        User user = UserMapper.INSTANCE.userResourceToUser(userDto);
+        User user = userMapper.userResourceToUser(userDto);
         user.setId(id);
 
         User result;
@@ -134,11 +131,11 @@ public class UsersService {
             throw new UserNotStoredException(e);
         }
 
-        return UserMapper.INSTANCE.userToUserResource(result);
+        return userMapper.userToUserResource(result);
     }
 
     public UserDto update(Long id, StoreUserRequest storeUserRequest) {
-        return this.update(id, UserMapper.INSTANCE.storeUserRequestToUserResource(storeUserRequest));
+        return this.update(id, userMapper.storeUserRequestToUserResource(storeUserRequest));
     }
 
     public void deleteById(long id) {

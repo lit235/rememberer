@@ -9,8 +9,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface RecordMapper {
 
-    RecordMapper INSTANCE = Mappers.getMapper( RecordMapper.class );
-
     RecordDto recordToRecordResource(Record record);
 
     Record recordResourceToRecord(RecordDto recordDto);
