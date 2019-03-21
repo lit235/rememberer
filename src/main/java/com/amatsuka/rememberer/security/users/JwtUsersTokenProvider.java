@@ -11,7 +11,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
+import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +23,9 @@ import java.util.List;
 public class JwtUsersTokenProvider {
 
     @Value("${security.jwt.token.secret-key:secret}")
-    private String secretKey = "secret";
+    private String secretKeyText = "secret";
+
+    private SecretKey secretKey;
 
     @Value("${security.jwt.token.expire-length:3600000}")
     private long validityInMilliseconds = 3600000; // 1h
@@ -33,7 +38,7 @@ public class JwtUsersTokenProvider {
 
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        secretKey = new SecretKeySpec(secretKeyText.getBytes(), 0, secretKeyText.getBytes().length, "AES");
     }
 
     public String createToken(String username, List<String> roles) {
@@ -48,7 +53,7 @@ public class JwtUsersTokenProvider {
                 .setClaims(claims)//
                 .setIssuedAt(now)//
                 .setExpiration(validity)//
-                .signWith(SignatureAlgorithm.HS256, secretKey)//
+                .signWith(secretKey)//
                 .compact();
     }
 

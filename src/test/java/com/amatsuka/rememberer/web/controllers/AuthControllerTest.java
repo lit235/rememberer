@@ -17,6 +17,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.spec.KeySpec;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +73,13 @@ public class AuthControllerTest extends BaseTest {
 
     @Test
     public void should_auth_user() throws Exception {
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("HMAC");
+        KeySpec spec = new PBEKeySpec("secret".toCharArray(), "secret".getBytes(), 65536, 256);
+        SecretKey tmp = factory.generateSecret(spec);
+        SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "HMAC");
+
+       String s = Base64.getEncoder().encodeToString(secret.getEncoded());
+
         Map<String, String> params = new HashMap<String, String>() {{
             put("username", "username");
             put("password", "secret");
