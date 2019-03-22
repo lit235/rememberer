@@ -48,7 +48,9 @@ public class User extends AbstractEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        return new ArrayList<GrantedAuthority>() {{
+            add((GrantedAuthority) () -> "USER");
+        }};
     }
 
     @Override

@@ -46,7 +46,9 @@ public class ApiClient extends AbstractEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        return new ArrayList<GrantedAuthority>() {{
+            add((GrantedAuthority) () -> "API_CLIENT");
+        }};
     }
 
     @Override

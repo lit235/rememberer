@@ -5,6 +5,7 @@ import com.amatsuka.rememberer.domain.entities.User;
 import com.amatsuka.rememberer.domain.repositories.UsersRepository;
 import com.amatsuka.rememberer.dto.UserDto;
 import com.amatsuka.rememberer.mappers.UserMapper;
+import com.amatsuka.rememberer.security.users.JwtUsersTokenProvider;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotDeletedException;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotStoredException;
 import com.amatsuka.rememberer.web.requests.StoreUserRequest;
@@ -18,6 +19,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,10 +34,16 @@ public class UsersService {
     
     private final UserMapper userMapper;
 
+    private final JwtUsersTokenProvider jwtUsersTokenProvider;
+
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UsersService(UsersRepository usersRepository, UserMapper userMapper) {
+    public UsersService(UsersRepository usersRepository, UserMapper userMapper, JwtUsersTokenProvider jwtUsersTokenProvider, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
         this.userMapper = userMapper;
+        this.jwtUsersTokenProvider = jwtUsersTokenProvider;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserDto> findAll() {
@@ -149,4 +158,11 @@ public class UsersService {
     }
 
 
+    public String generateToken(UserDto userDto) {
+        return jwtUsersTokenProvider.createToken(
+                userDto.getUsername(),
+                this.usersRepository.findByUsername(userDto.getUsername()).orElseThrow(
+                        () -> new UsernameNotFoundException("Username " + userDto.getUsername() + "not found")
+                ).getRoles());
+    }
 }

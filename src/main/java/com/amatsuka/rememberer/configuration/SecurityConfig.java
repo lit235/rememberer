@@ -2,6 +2,8 @@ package com.amatsuka.rememberer.configuration;
 
 import com.amatsuka.rememberer.security.users.JwtUsersConfigurer;
 import com.amatsuka.rememberer.security.users.JwtUsersTokenProvider;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -33,9 +35,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+
     @Configuration
     @Order(1)
+    @RequiredArgsConstructor
     public static class ApiClientsSecurityConfig extends WebSecurityConfigurerAdapter {
+
+        @Autowired
+        private final JwtUsersConfigurer jwtUsersConfigurer;
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -46,9 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/api/**").hasRole("API_CLIENT")
+                    .antMatchers("/api/**").hasAuthority("API_CLIENT")
                     .and()
-                    .apply(new JwtUsersConfigurer());
+                    .apply(jwtUsersConfigurer);
             //@formatter:on
         }
     }
@@ -56,7 +63,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Configuration
     @Order(2)
+    @RequiredArgsConstructor
     public static class UsersSecurityConfig extends WebSecurityConfigurerAdapter {
+
+        @Autowired
+        private final JwtUsersConfigurer jwtUsersConfigurer;
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -70,10 +81,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                     .antMatchers("/admin/auth/signin").permitAll()
                     .antMatchers("/admin/auth/signup").permitAll()
-                    .antMatchers("/admin/**").hasRole("USER")
-                    .anyRequest().authenticated()
+                    .antMatchers("/admin/**").hasAuthority("USER")
                     .and()
-                    .apply(new JwtUsersConfigurer());
+                    .apply(jwtUsersConfigurer);
             //@formatter:on
         }
     }
