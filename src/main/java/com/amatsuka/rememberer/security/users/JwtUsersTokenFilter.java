@@ -15,7 +15,7 @@ public class JwtUsersTokenFilter extends GenericFilterBean {
 
     private JwtUsersTokenProvider jwtTokenProvider;
 
-    public JwtUsersTokenFilter(JwtUsersTokenProvider jwtTokenProvider) {
+    JwtUsersTokenFilter(JwtUsersTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -26,7 +26,7 @@ public class JwtUsersTokenFilter extends GenericFilterBean {
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) req);
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            Authentication auth = token != null ? jwtTokenProvider.getAuthentication(token) : null;
+            Authentication auth = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
 

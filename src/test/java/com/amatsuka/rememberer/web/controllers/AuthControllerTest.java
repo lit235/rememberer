@@ -4,6 +4,8 @@ import com.amatsuka.rememberer.util.BaseTest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,12 +75,8 @@ public class AuthControllerTest extends BaseTest {
 
     @Test
     public void should_auth_user() throws Exception {
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("HMAC");
-        KeySpec spec = new PBEKeySpec("secret".toCharArray(), "secret".getBytes(), 65536, 256);
-        SecretKey tmp = factory.generateSecret(spec);
-        SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "HMAC");
-
-       String s = Base64.getEncoder().encodeToString(secret.getEncoded());
+       /* SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        String s = Base64.getEncoder().encodeToString(key.getEncoded());*/
 
         Map<String, String> params = new HashMap<String, String>() {{
             put("username", "username");

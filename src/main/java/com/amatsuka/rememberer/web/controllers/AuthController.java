@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,19 +32,19 @@ import static org.springframework.http.ResponseEntity.ok;
 public class AuthController {
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    JwtUsersTokenProvider jwtTokenProvider;
+    private JwtUsersTokenProvider jwtTokenProvider;
 
     @Autowired
-    UsersRepository users;
+    private UsersRepository users;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    UsersService usersService;
+    private UsersService usersService;
 
     @PostMapping("signin")
     public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
@@ -89,8 +88,7 @@ public class AuthController {
 
     @PostMapping("profile")
     public UserDetails profile(Authentication authentication) {
-        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
 
-        return userDetails;
+        return (UserDetails)authentication.getPrincipal();
     }
 }

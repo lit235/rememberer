@@ -1,6 +1,7 @@
 package com.amatsuka.rememberer.configuration;
 
 import com.amatsuka.rememberer.security.users.JwtUsersConfigurer;
+import com.amatsuka.rememberer.security.users.JwtUsersTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
