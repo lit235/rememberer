@@ -106,7 +106,8 @@ public class RecordsControllerTest extends BaseTest {
             put("password", "secret");
         }};
 
-       RecordDto resource = new RecordDto(null, recordParams.get("text"), null, null);
+        //@TODO Заменить на builder
+       RecordDto resource = new RecordDto(null, recordParams.get("text"), null, null, null);
         RecordDto encryptedRecord = this.recordEncryptService.encrypt(resource, recordParams.get("password"));
 
         ObjectMapper mapper = new ObjectMapper();

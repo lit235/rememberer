@@ -14,7 +14,8 @@ public class RecordEncryptService {
                 recordDto.getId(),
                 new String(Base64.encodeBase64(recordDto.getText().getBytes())),
                 recordDto.getCode(),
-                DigestUtils.md5Hex(password)
+                DigestUtils.md5Hex(password),
+                recordDto.getCreatedAt()
         );
     }
 
@@ -29,7 +30,8 @@ public class RecordEncryptService {
                 recordDto.getId(),
                 new String(Base64.decodeBase64(recordDto.getText())),
                 recordDto.getCode(),
-                recordDto.getPasswordHash()
+                recordDto.getPasswordHash(),
+                recordDto.getCreatedAt()
         );
     }
 }

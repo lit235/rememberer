@@ -1,6 +1,5 @@
 package com.amatsuka.rememberer.web.controllers;
 
-import com.amatsuka.rememberer.dto.ApiClientDto;
 import com.amatsuka.rememberer.dto.UserDto;
 import com.amatsuka.rememberer.sevices.UsersService;
 import com.amatsuka.rememberer.util.BaseTest;
@@ -157,7 +156,7 @@ public class UsersControllerTest extends BaseTest {
 
     @Test
     public void should_delete_user() throws Exception {
-        MockHttpServletRequestBuilder request = delete("/admin/users/" + 1)
+        MockHttpServletRequestBuilder request = delete("/admin/users/" + 2)
                 .accept(MediaType.APPLICATION_JSON);
 
         request = appendAuthorizationToken(request, apiToken);
@@ -165,6 +164,15 @@ public class UsersControllerTest extends BaseTest {
         ResultActions response = this.mvc.perform(request);
 
         response.andExpect(status().isOk());
+
+       request = get("/admin/users/" + 2)
+                .accept(MediaType.APPLICATION_JSON);
+
+        request = appendAuthorizationToken(request, apiToken);
+
+        response = this.mvc.perform(request);
+
+        response.andExpect(status().isNotFound());
 
     }
 
