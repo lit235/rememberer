@@ -1,7 +1,7 @@
 package com.amatsuka.rememberer.web.controllers;
 
 import com.amatsuka.rememberer.dto.UserDto;
-import com.amatsuka.rememberer.sevices.UsersService;
+import com.amatsuka.rememberer.services.UsersService;
 import com.amatsuka.rememberer.util.BaseTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;

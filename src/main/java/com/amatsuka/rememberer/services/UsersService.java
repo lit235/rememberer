@@ -1,4 +1,4 @@
-package com.amatsuka.rememberer.sevices;
+package com.amatsuka.rememberer.services;
 
 import com.amatsuka.rememberer.domain.entities.QUser;
 import com.amatsuka.rememberer.domain.entities.User;
@@ -6,8 +6,8 @@ import com.amatsuka.rememberer.domain.repositories.UsersRepository;
 import com.amatsuka.rememberer.dto.UserDto;
 import com.amatsuka.rememberer.mappers.UserMapper;
 import com.amatsuka.rememberer.security.users.JwtUsersTokenProvider;
-import com.amatsuka.rememberer.sevices.exceptions.UserNotDeletedException;
-import com.amatsuka.rememberer.sevices.exceptions.UserNotStoredException;
+import com.amatsuka.rememberer.services.exceptions.UserNotDeletedException;
+import com.amatsuka.rememberer.services.exceptions.UserNotStoredException;
 import com.amatsuka.rememberer.web.requests.StoreUserRequest;
 import com.amatsuka.rememberer.web.requests.UserFilterRequest;
 import com.github.javafaker.Faker;

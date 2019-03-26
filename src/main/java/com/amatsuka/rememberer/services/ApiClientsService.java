@@ -1,12 +1,12 @@
-package com.amatsuka.rememberer.sevices;
+package com.amatsuka.rememberer.services;
 
 import com.amatsuka.rememberer.domain.entities.ApiClient;
 import com.amatsuka.rememberer.domain.repositories.ApiClientsRepository;
 import com.amatsuka.rememberer.dto.ApiClientDto;
 import com.amatsuka.rememberer.mappers.ApiClientMapper;
 import com.amatsuka.rememberer.security.users.JwtUsersTokenProvider;
-import com.amatsuka.rememberer.sevices.exceptions.ApiClientNotDeletedException;
-import com.amatsuka.rememberer.sevices.exceptions.ApiClientNotStoredException;
+import com.amatsuka.rememberer.services.exceptions.ApiClientNotDeletedException;
+import com.amatsuka.rememberer.services.exceptions.ApiClientNotStoredException;
 import com.amatsuka.rememberer.web.requests.StoreApiClientRequest;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;

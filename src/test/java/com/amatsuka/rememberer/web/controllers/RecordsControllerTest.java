@@ -2,8 +2,8 @@ package com.amatsuka.rememberer.web.controllers;
 
 import com.amatsuka.rememberer.dto.ApiClientDto;
 import com.amatsuka.rememberer.dto.RecordDto;
-import com.amatsuka.rememberer.sevices.ApiClientsService;
-import com.amatsuka.rememberer.sevices.RecordEncryptService;
+import com.amatsuka.rememberer.services.ApiClientsService;
+import com.amatsuka.rememberer.services.RecordEncryptService;
 import com.amatsuka.rememberer.util.BaseTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;

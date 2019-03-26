@@ -1,7 +1,7 @@
-package com.amatsuka.rememberer.sevices;
+package com.amatsuka.rememberer.services;
 
 import com.amatsuka.rememberer.dto.RecordDto;
-import com.amatsuka.rememberer.sevices.exceptions.RecordNotEncryptedException;
+import com.amatsuka.rememberer.services.exceptions.RecordNotEncryptedException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;

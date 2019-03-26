@@ -1,15 +1,11 @@
 package com.amatsuka.rememberer.web.controllers;
 
 import com.amatsuka.rememberer.dto.RecordDto;
-import com.amatsuka.rememberer.sevices.RecordsService;
-import com.amatsuka.rememberer.sevices.exceptions.RecordNotStoredException;
-import com.amatsuka.rememberer.web.exceptions.BadRequestException;
+import com.amatsuka.rememberer.services.RecordsService;
 import com.amatsuka.rememberer.web.exceptions.ResourceNotFoundException;
 import com.amatsuka.rememberer.web.exceptions.ValidationException;
 import com.amatsuka.rememberer.web.requests.StoreRecordRequest;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;

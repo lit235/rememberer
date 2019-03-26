@@ -1,11 +1,11 @@
-package com.amatsuka.rememberer.sevices;
+package com.amatsuka.rememberer.services;
 
 import com.amatsuka.rememberer.dto.RecordDto;
 import com.amatsuka.rememberer.mappers.RecordMapper;
 import com.amatsuka.rememberer.domain.entities.Record;
 import com.amatsuka.rememberer.domain.repositories.RecordsRepository;
-import com.amatsuka.rememberer.sevices.exceptions.RecordNotEncryptedException;
-import com.amatsuka.rememberer.sevices.exceptions.RecordNotStoredException;
+import com.amatsuka.rememberer.services.exceptions.RecordNotEncryptedException;
+import com.amatsuka.rememberer.services.exceptions.RecordNotStoredException;
 import com.amatsuka.rememberer.web.requests.StoreRecordRequest;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 

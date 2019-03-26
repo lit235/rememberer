@@ -1,7 +1,7 @@
 package com.amatsuka.rememberer.tasks;
 
 import com.amatsuka.rememberer.dto.RecordDto;
-import com.amatsuka.rememberer.sevices.RecordsService;
+import com.amatsuka.rememberer.services.RecordsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 

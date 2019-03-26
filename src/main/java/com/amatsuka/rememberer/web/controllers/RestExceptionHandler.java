@@ -1,10 +1,9 @@
 package com.amatsuka.rememberer.web.controllers;
 
-import com.amatsuka.rememberer.sevices.exceptions.RecordNotStoredException;
-import com.amatsuka.rememberer.sevices.exceptions.UserNotDeletedException;
-import com.amatsuka.rememberer.sevices.exceptions.UserNotStoredException;
-import com.amatsuka.rememberer.sevices.exceptions.UserNotUpdatedException;
-import com.amatsuka.rememberer.web.exceptions.BadRequestException;
+import com.amatsuka.rememberer.services.exceptions.RecordNotStoredException;
+import com.amatsuka.rememberer.services.exceptions.UserNotDeletedException;
+import com.amatsuka.rememberer.services.exceptions.UserNotStoredException;
+import com.amatsuka.rememberer.services.exceptions.UserNotUpdatedException;
 import com.amatsuka.rememberer.web.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

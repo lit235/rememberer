@@ -1,11 +1,7 @@
 package com.amatsuka.rememberer.web.controllers;
 
 import com.amatsuka.rememberer.dto.ApiClientDto;
-import com.amatsuka.rememberer.sevices.ApiClientsService;
-import com.amatsuka.rememberer.sevices.exceptions.UserNotDeletedException;
-import com.amatsuka.rememberer.sevices.exceptions.UserNotStoredException;
-import com.amatsuka.rememberer.sevices.exceptions.UserNotUpdatedException;
-import com.amatsuka.rememberer.web.exceptions.BadRequestException;
+import com.amatsuka.rememberer.services.ApiClientsService;
 import com.amatsuka.rememberer.web.exceptions.ResourceNotFoundException;
 import com.amatsuka.rememberer.web.exceptions.ValidationException;
 import com.amatsuka.rememberer.web.requests.StoreApiClientRequest;

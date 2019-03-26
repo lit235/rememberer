@@ -1,4 +1,4 @@
-package com.amatsuka.rememberer.sevices;
+package com.amatsuka.rememberer.services;
 
 import com.amatsuka.rememberer.domain.entities.ApiClient;
 import com.amatsuka.rememberer.domain.entities.User;
@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Component
