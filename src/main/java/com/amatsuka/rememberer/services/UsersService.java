@@ -12,6 +12,7 @@ import com.amatsuka.rememberer.web.requests.StoreUserRequest;
 import com.amatsuka.rememberer.web.requests.UserFilterRequest;
 import com.github.javafaker.Faker;
 import com.google.common.collect.Lists;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,7 @@ public class UsersService {
                 .collect(Collectors.toList());
     }
 
+    //@TODO заменить на builder
     private Predicate buildDslQuery(UserFilterRequest filterRequest) {
 
         BooleanExpression query = QUser.user.id.isNotNull();
