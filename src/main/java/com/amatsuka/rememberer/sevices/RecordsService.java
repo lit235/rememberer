@@ -12,6 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class RecordsService {
@@ -82,5 +87,25 @@ public class RecordsService {
         Faker faker = new Faker();
 
         return faker.funnyName().name();
+    }
+
+    public List<RecordDto> getExpiredRecords() {
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.add(Calendar.DATE, -5);
+
+        List<Record> records  = this.recordsRepository.findByCreatedAtBefore(calendar.getTime());
+
+        return records.stream()
+                .map(recordMapper::recordToRecordResource)
+                .collect(Collectors.toList());
+    }
+
+    public void deleteRecords(List<RecordDto> recordsDto) {
+
+        List<Record> records = recordsDto.stream().map(recordMapper::recordResourceToRecord).collect(Collectors.toList());
+
+        this.recordsRepository.deleteAll(records);
     }
 }
