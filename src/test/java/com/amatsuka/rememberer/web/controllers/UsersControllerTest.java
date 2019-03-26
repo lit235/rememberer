@@ -65,8 +65,8 @@ public class UsersControllerTest extends BaseTest {
     @Test
     public void should_store_user() throws Exception {
         Map<String, String> params = new HashMap<String, String>() {{
-            put("name", "name");
-            put("username", "username");
+            put("name", "test_name");
+            put("username", "test_username");
         }};
 
         ObjectMapper mapper = new ObjectMapper();
@@ -81,8 +81,8 @@ public class UsersControllerTest extends BaseTest {
         ResultActions response = this.mvc.perform(request);
 
         response.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name", is("name")))
-                .andExpect(jsonPath("$.username", is("username")));
+                .andExpect(jsonPath("$.name", is("test_name")))
+                .andExpect(jsonPath("$.username", is("test_username")));
     }
 
     @Test
@@ -108,8 +108,8 @@ public class UsersControllerTest extends BaseTest {
     @Test
     public void should_not_store_user_with_non_unique_username() throws Exception {
         Map<String, String> params = new HashMap<String, String>() {{
-            put("name", "name");
-            put("username", "username");
+            put("name", "test_name");
+            put("username", "test_username");
         }};
 
         ObjectMapper mapper = new ObjectMapper();
@@ -215,7 +215,6 @@ public class UsersControllerTest extends BaseTest {
         ResultActions response = this.mvc.perform(request);
 
         response.andExpect(status().isOk());
-        //TODO проанализировать ответ на наличие пользователей пользователей по фильтру и порядку
 
         String responseContent = response.andReturn().getResponse().getContentAsString();
         List<HashMap<String, String>> users = retrieveResourceCollectionFromResponse(responseContent);

@@ -9,15 +9,17 @@ import com.amatsuka.rememberer.web.exceptions.BadRequestException;
 import com.amatsuka.rememberer.web.exceptions.ResourceNotFoundException;
 import com.amatsuka.rememberer.web.exceptions.ValidationException;
 import com.amatsuka.rememberer.web.requests.StoreApiClientRequest;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-
+@Api(value = "ApiClients", description = "Работа с данными клиентов для подключения к API сервиса")
 @RestController
 @RequestMapping("/api/admin/clients")
 class ApiClientController {
@@ -43,7 +45,7 @@ class ApiClientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiClientDto create(@RequestBody @Valid StoreApiClientRequest storeApiClientRequest, Errors errors) {
+    public ApiClientDto create(@RequestBody @Valid StoreApiClientRequest storeApiClientRequest, @ApiIgnore Errors errors) {
         if (errors.hasErrors()) {
             throw new ValidationException();
         }
@@ -53,7 +55,7 @@ class ApiClientController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public ApiClientDto update(@PathVariable("id") Long id, @RequestBody @Valid StoreApiClientRequest storeApiClientRequest, Errors errors) {
+    public ApiClientDto update(@PathVariable("id") Long id, @RequestBody @Valid StoreApiClientRequest storeApiClientRequest, @ApiIgnore Errors errors) {
         if (errors.hasErrors()) {
             throw new ValidationException();
         }

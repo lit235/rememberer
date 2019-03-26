@@ -10,6 +10,7 @@ import com.amatsuka.rememberer.sevices.exceptions.UserNotDeletedException;
 import com.amatsuka.rememberer.sevices.exceptions.UserNotStoredException;
 import com.amatsuka.rememberer.web.requests.StoreUserRequest;
 import com.amatsuka.rememberer.web.requests.UserFilterRequest;
+import com.github.javafaker.Faker;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -38,12 +39,16 @@ public class UsersService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final Faker faker;
+
     @Autowired
     public UsersService(UsersRepository usersRepository, UserMapper userMapper, JwtUsersTokenProvider jwtUsersTokenProvider, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
         this.userMapper = userMapper;
         this.jwtUsersTokenProvider = jwtUsersTokenProvider;
         this.passwordEncoder = passwordEncoder;
+
+        this.faker = new Faker();
     }
 
     public List<UserDto> findAll() {
@@ -108,6 +113,12 @@ public class UsersService {
     }
 
     public UserDto create(UserDto userDto) {
+
+        if (userDto.getPasswordHash() == null) {
+            String password = faker.lorem().word();
+            userDto.setPasswordHash(passwordEncoder.encode(password));
+        }
+
         User user = userMapper.userResourceToUser(userDto);
 
         User result;

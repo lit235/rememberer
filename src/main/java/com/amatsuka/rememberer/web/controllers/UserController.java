@@ -10,15 +10,18 @@ import com.amatsuka.rememberer.web.exceptions.ResourceNotFoundException;
 import com.amatsuka.rememberer.web.exceptions.ValidationException;
 import com.amatsuka.rememberer.web.requests.StoreUserRequest;
 import com.amatsuka.rememberer.web.requests.UserFilterRequest;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+@Api(value = "Users", description = "Управление пользователями административного интерфейса")
 @RestController
 @RequestMapping("/admin/users")
 class UserController {
@@ -45,7 +48,7 @@ class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@RequestBody @Valid StoreUserRequest storeUserRequest, Errors errors) {
+    public UserDto create(@RequestBody @Valid StoreUserRequest storeUserRequest, @ApiIgnore Errors errors) {
 
         if (errors.hasErrors()) {
             throw new ValidationException();
@@ -56,7 +59,7 @@ class UserController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public UserDto update(@PathVariable("id") Long id, @RequestBody @Valid StoreUserRequest storeUserRequest, Errors errors) {
+    public UserDto update(@PathVariable("id") Long id, @RequestBody @Valid StoreUserRequest storeUserRequest, @ApiIgnore Errors errors) {
 
         if (errors.hasErrors()) {
             throw new ValidationException();

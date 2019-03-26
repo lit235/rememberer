@@ -7,14 +7,17 @@ import com.amatsuka.rememberer.web.exceptions.BadRequestException;
 import com.amatsuka.rememberer.web.exceptions.ResourceNotFoundException;
 import com.amatsuka.rememberer.web.exceptions.ValidationException;
 import com.amatsuka.rememberer.web.requests.StoreRecordRequest;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
-@Slf4j
+@Api(value = "Records", description = "Создание и получение созданных заметок")
 @RestController
 @RequestMapping("/api/records")
 class RecordController {
@@ -27,7 +30,7 @@ class RecordController {
     }
 
     @PostMapping
-    public RecordDto create(@RequestBody @Valid StoreRecordRequest recordRequest, Errors errors) {
+    public RecordDto create(@RequestBody @Valid StoreRecordRequest recordRequest,  @ApiIgnore Errors errors) {
         if (errors.hasErrors()) {
             throw new ValidationException();
         }
