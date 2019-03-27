@@ -1,5 +1,6 @@
 package com.amatsuka.rememberer.services;
 
+import com.amatsuka.rememberer.domain.QPredicatesBuilder;
 import com.amatsuka.rememberer.domain.entities.QUser;
 import com.amatsuka.rememberer.domain.entities.User;
 import com.amatsuka.rememberer.domain.repositories.UsersRepository;
@@ -28,6 +29,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Arrays.asList;
 
 @Service
 public class UsersService {
@@ -59,28 +62,16 @@ public class UsersService {
                 .collect(Collectors.toList());
     }
 
-    //@TODO заменить на builder
     private Predicate buildDslQuery(UserFilterRequest filterRequest) {
 
-        BooleanExpression query = QUser.user.id.isNotNull();
+        QPredicatesBuilder builder = new QPredicatesBuilder();
 
-        if (filterRequest.getName() != null) {
-            query = query.and(QUser.user.name.like(filterRequest.getName()));
-        }
+        builder.addIfNonNull(filterRequest.getName(), QUser.user.name::like);
+        builder.addIfNonNull(filterRequest.getUsername(), QUser.user.username::like);
+        builder.addIfNonNull(filterRequest.getCreatedAtFrom(), QUser.user.createdAt::gt);
+        builder.addIfNonNull(filterRequest.getCreatedAtTo(), QUser.user.createdAt::lt);
 
-        if (filterRequest.getUsername() != null) {
-            query = query.and(QUser.user.username.like(filterRequest.getUsername()));
-        }
-
-        if (filterRequest.getCreatedAtFrom() != null) {
-            query = query.and(QUser.user.createdAt.gt(filterRequest.getCreatedAtFrom()));
-        }
-
-        if (filterRequest.getCreatedAtTo() != null) {
-            query = query.and(QUser.user.createdAt.lt(filterRequest.getCreatedAtFrom()));
-        }
-
-        return query;
+        return builder.build();
     }
 
     private Pageable buildPagable(UserFilterRequest filterRequest) {
