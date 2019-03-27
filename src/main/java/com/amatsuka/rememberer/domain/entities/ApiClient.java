@@ -22,7 +22,7 @@ public class ApiClient extends AbstractEntity implements UserDetails {
     @Column(nullable = false, unique = true, length = 20)
     private @NonNull String name;
 
-    @Column(nullable = false, unique = true, length = 40)
+    @Column(nullable = false, length = 40)
     private @NonNull String clientId;
 
     @Column(nullable = false)

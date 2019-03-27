@@ -10,6 +10,7 @@
 	</parent>
 	<groupId>com.amatsuka</groupId>
 	<artifactId>rememberer</artifactId>
+	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>rememberer</name>
 	<description>Demo project for Spring Boot</description>
@@ -154,6 +155,12 @@
 			<version>0.10.5</version>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!--<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>-->
 
 	</dependencies>
 
