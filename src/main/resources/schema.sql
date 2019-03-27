@@ -1,3 +1,14 @@
+CREATE TABLE IF NOT EXISTS users (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  created_at datetime NOT NULL,
+  login_at datetime DEFAULT NULL,
+  name varchar(255) DEFAULT NULL,
+  password_hash varchar(255) NOT NULL,
+  username varchar(20) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY UK_users_username (username)
+);
+
 CREATE TABLE IF NOT EXISTS api_clients (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   client_id varchar(40) NOT NULL,
@@ -18,17 +29,5 @@ CREATE TABLE IF NOT EXISTS records (
   text varchar(255) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY UK_records_code (code)
-);
-
-
-CREATE TABLE IF NOT EXISTS users (
-  id bigint(20) NOT NULL AUTO_INCREMENT,
-  created_at datetime NOT NULL,
-  login_at datetime DEFAULT NULL,
-  name varchar(255) DEFAULT NULL,
-  password_hash varchar(255) NOT NULL,
-  username varchar(20) NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE KEY UK_users_username (username)
 );
 
