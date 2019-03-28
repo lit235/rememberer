@@ -21,8 +21,11 @@ test: test.run-env test.do-tests test.stop-env
 # --- [ Development ] -------------------------------------------------------------------------------------------------
 
 dev.clean-db:
-	mvn flyway\:clean -Dflyway.configFile=flyway.properties \
+	mvn flyway\:clean -Dflyway.configFile=flyway.properties
 	mvn flyway\:migrate -Dflyway.configFile=flyway.properties
 
 dev.run-env:
-	docker-compose -f docker/docker-compose.yml up -d
+	docker-compose -f docker/docker-compose.dev.yml up -d
+
+dev.stop-env:
+	docker-compose -f docker/docker-compose.dev.yml down

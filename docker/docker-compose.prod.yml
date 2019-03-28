@@ -1,0 +1,31 @@
+version: '3.2'
+networks:
+  backend-network:
+    driver: bridge
+  frontend-network:
+    driver: bridge
+
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: rememberer
+      MYSQL_USER: rememberer
+      MYSQL_PASSWORD: rememberer
+    ports: ['3306:3306']
+    networks:
+      - backend-network
+
+  tomcat:
+    build:
+      context: ./docker/tomcat
+      dockerfile: Dockerfile
+    restart: always
+    working_dir: /usr/local/tomcat/webapps
+    ports: ['8888:8080']
+    depends_on:
+      - db
+    networks:
+      - backend-network
