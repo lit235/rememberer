@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   created_at datetime NOT NULL,
   login_at datetime DEFAULT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
   UNIQUE KEY UK_users_username (username)
 );
 
-CREATE TABLE IF NOT EXISTS api_clients (
+CREATE TABLE api_clients (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   client_id varchar(40) NOT NULL,
   created_at datetime NOT NULL,
@@ -18,10 +18,10 @@ CREATE TABLE IF NOT EXISTS api_clients (
   user_id bigint(20) DEFAULT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY UK_api_clients_client_id (client_id),
-  FOREIGN KEY (user_id) REFERENCES users (id)
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS records (
+CREATE TABLE records (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   code varchar(40) NOT NULL,
   created_at datetime NOT NULL,
