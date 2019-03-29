@@ -50,6 +50,12 @@ public class ApiClientsService {
         return apiClient.map(apiClientMapper::apiClientToApiClientResource);
     }
 
+    public Optional<ApiClientDto> findByClientId(String clientId) {
+        Optional<ApiClient> apiClient = this.apiClientsRepository.findByClientId(clientId);
+
+        return apiClient.map(apiClientMapper::apiClientToApiClientResource);
+    }
+
     public ApiClientDto create(ApiClientDto ApiClientDto) {
         ApiClient apiClient = apiClientMapper.apiClientResourceToApiClient(ApiClientDto);
 

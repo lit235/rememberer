@@ -1,5 +1,9 @@
 package com.amatsuka.rememberer.web.controller;
 
+import com.amatsuka.rememberer.dto.ApiClientDto;
+import com.amatsuka.rememberer.dto.UserDto;
+import com.amatsuka.rememberer.service.ApiClientsService;
+import com.amatsuka.rememberer.service.UsersService;
 import com.amatsuka.rememberer.util.BaseTest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,12 +24,12 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -38,6 +43,12 @@ public class AuthControllerTest extends BaseTest {
     private MockMvc mvc;
 
     private Faker faker;
+
+    @Autowired
+    private UsersService usersService;
+
+    @Autowired
+    private ApiClientsService apiClientsService;
 
     public AuthControllerTest() {
         this.faker = new Faker();
@@ -99,6 +110,26 @@ public class AuthControllerTest extends BaseTest {
 
         testAuthWorkingResponse.andExpect(status().isOk());
 
+    }
+
+    @Test
+    public void should_generate_token() throws Exception {
+        Optional<UserDto> userDto = usersService.findOne(1L);
+
+        String apiToken = usersService.generateToken(userDto.orElseThrow(() -> new UsernameNotFoundException("Username not found")));
+
+        ApiClientDto apiClientDto = ApiClientDto.builder().clientId("testclientid").name("testclient").build();
+        apiClientDto = apiClientsService.create(apiClientDto);
+
+        MockHttpServletRequestBuilder request = get("/admin/auth/generate-token/" + apiClientDto.getClientId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        request = appendAuthorizationToken(request, apiToken);
+
+        ResultActions response = this.mvc.perform(request);
+
+        response.andExpect(status().isOk());
     }
 }
 
