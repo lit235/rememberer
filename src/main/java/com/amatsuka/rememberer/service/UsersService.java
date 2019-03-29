@@ -9,11 +9,14 @@ import com.amatsuka.rememberer.mapper.UserMapper;
 import com.amatsuka.rememberer.security.users.JwtUsersTokenProvider;
 import com.amatsuka.rememberer.service.exceptions.UserNotDeletedException;
 import com.amatsuka.rememberer.service.exceptions.UserNotStoredException;
+import com.amatsuka.rememberer.service.exceptions.UserNotUpdatedException;
 import com.amatsuka.rememberer.web.request.StoreUserRequest;
+import com.amatsuka.rememberer.web.request.UpdateUserRequest;
 import com.amatsuka.rememberer.web.request.UserFilterRequest;
 import com.github.javafaker.Faker;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -128,7 +131,6 @@ public class UsersService {
     //TODO решить что делать с дублированием. В save проверяется новая ли это запись, возможно надо чекать наличие id
     public UserDto update(Long id, UserDto userDto) {
         User user = userMapper.userResourceToUser(userDto);
-        user.setId(id);
 
         User result;
 
@@ -142,8 +144,25 @@ public class UsersService {
         return userMapper.userToUserResource(result);
     }
 
-    public UserDto update(Long id, StoreUserRequest storeUserRequest) {
-        return this.update(id, userMapper.storeUserRequestToUserResource(storeUserRequest));
+    public UserDto update(Long id, UpdateUserRequest updateUserRequest) {
+
+        UserDto updateUserDto = userMapper.updateUserRequestToUserResource(updateUserRequest);
+
+        Optional<User> user = this.usersRepository.findById(id);
+
+        UserDto userDto = userMapper.userToUserResource(user.orElseThrow(UserNotUpdatedException::new));
+
+        //TODO как-то костыльно переносятся данные из запроса в dto
+
+        if (updateUserDto.getUsername() != null) {
+            userDto.setUsername(updateUserDto.getUsername());
+        }
+
+        if (updateUserDto.getName() != null) {
+            userDto.setName(updateUserDto.getName());
+        }
+
+        return this.update(id, userDto);
     }
 
     public void deleteById(long id) {

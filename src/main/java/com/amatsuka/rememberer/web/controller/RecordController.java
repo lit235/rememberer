@@ -7,6 +7,7 @@ import com.amatsuka.rememberer.web.exception.ValidationException;
 import com.amatsuka.rememberer.web.request.StoreRecordRequest;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -26,6 +27,7 @@ class RecordController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public RecordDto create(@RequestBody @Valid StoreRecordRequest recordRequest,  @ApiIgnore Errors errors) {
         if (errors.hasErrors()) {
             throw new ValidationException();

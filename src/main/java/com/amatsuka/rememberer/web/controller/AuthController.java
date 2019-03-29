@@ -81,18 +81,14 @@ public class AuthController {
 
     @PostMapping("signup")
     public UserDto signup(@RequestBody AuthenticationRequest data) {
-        try {
             String username = data.getUsername();
             String password = data.getPassword();
-            String encryptedPassword = passwordEncoder.encode(password);
+            //TODO костыль с обозначением типа шифрования пароля
+            String encryptedPassword = "{bcrypt}" + passwordEncoder.encode(password);
 
             UserDto userDto = UserDto.builder().username(username).passwordHash(encryptedPassword).build();
 
             return this.usersService.create(userDto);
-
-        } catch (UserNotStoredException e) {
-            throw new BadRequestException();
-        }
     }
 
     @PostMapping("profile")

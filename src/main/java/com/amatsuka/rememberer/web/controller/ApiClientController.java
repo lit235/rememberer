@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 @Api(value = "ApiClients", description = "Работа с данными клиентов для подключения к API сервиса")
 @RestController
-@RequestMapping("/api/admin/clients")
+@RequestMapping("/admin/clients")
 class ApiClientController {
 
     private ApiClientsService service;
@@ -49,7 +49,7 @@ class ApiClientController {
         return service.create(storeApiClientRequest);
     }
 
-    @PutMapping
+    @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public ApiClientDto update(@PathVariable("id") Long id, @RequestBody @Valid StoreApiClientRequest storeApiClientRequest, @ApiIgnore Errors errors) {
         if (errors.hasErrors()) {

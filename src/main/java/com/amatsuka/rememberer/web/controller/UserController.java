@@ -5,6 +5,7 @@ import com.amatsuka.rememberer.service.UsersService;
 import com.amatsuka.rememberer.web.exception.ResourceNotFoundException;
 import com.amatsuka.rememberer.web.exception.ValidationException;
 import com.amatsuka.rememberer.web.request.StoreUserRequest;
+import com.amatsuka.rememberer.web.request.UpdateUserRequest;
 import com.amatsuka.rememberer.web.request.UserFilterRequest;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,15 +54,15 @@ class UserController {
         return service.create(storeUserRequest);
     }
 
-    @PutMapping
+    @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto update(@PathVariable("id") Long id, @RequestBody @Valid StoreUserRequest storeUserRequest, @ApiIgnore Errors errors) {
+    public UserDto update(@PathVariable("id") Long id, @RequestBody @Valid UpdateUserRequest updateUserRequest, @ApiIgnore Errors errors) {
 
         if (errors.hasErrors()) {
             throw new ValidationException();
         }
 
-        return service.update(id, storeUserRequest);
+        return service.update(id, updateUserRequest);
     }
 
     @DeleteMapping("/{id}")

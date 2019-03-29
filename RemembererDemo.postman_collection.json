@@ -9,6 +9,42 @@
 			"name": "Authorization",
 			"item": [
 				{
+					"name": "NonAuthorizedRequest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4608487-6f0c-4ab4-95a6-012b677fd2fe",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/admin/profile",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Authorization",
 					"event": [
 						{
@@ -59,6 +95,22 @@
 				},
 				{
 					"name": "Get api token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0ef17a67-5b72-481c-a334-ddabcb2263d0",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.environment.set(\"clientApiToken\", pm.response.text());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -94,45 +146,138 @@
 			"item": [
 				{
 					"name": "AddUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "756565e4-1a45-48b4-af09-03b00422b184",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
-						"header": [],
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminApiToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"username\": \"username1\",\n\t\"name\": \"name1\"\n}"
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/admin/users",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							]
 						}
 					},
 					"response": []
 				},
 				{
 					"name": "AddSecondUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "55023cc3-0338-4ecb-a68c-be926b1ff0fe",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
-						"header": [],
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminApiToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"username\": \"username2\",\n\t\"name\": \"name2\"\n}"
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/admin/users",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							]
 						}
 					},
 					"response": []
 				},
 				{
 					"name": "ShowUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "80c341a8-527b-4036-a819-a705d4f50a48",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminApiToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/admin/users",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							]
 						}
 					},
 					"response": []
@@ -141,28 +286,100 @@
 					"name": "ShowUsersWithFilter",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminApiToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/admin/users?username=username%&sortBy=name&direction=desc",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "username%"
+								},
+								{
+									"key": "sortBy",
+									"value": "name"
+								},
+								{
+									"key": "direction",
+									"value": "desc"
+								}
+							]
 						}
 					},
 					"response": []
 				},
 				{
 					"name": "UpdateUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0b7d012e-45c6-47d3-9c7f-0e27edca6c54",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
-						"header": [],
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"name\": \"new_username\",\n\t\"username\": \"new_username\"\n}"
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/admin/users/2",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								"2"
+							]
 						}
 					},
 					"response": []
@@ -183,16 +400,43 @@
 					"response": []
 				},
 				{
-					"name": "ShowUsersAboutManipulation",
+					"name": "ShowUsersAfterManipulation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "80c341a8-527b-4036-a819-a705d4f50a48",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminApiToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/admin/users",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							]
 						}
 					},
 					"response": []
@@ -214,7 +458,31 @@
 				},
 				{
 					"name": "ShowNonExistedUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7e7a9de0-9e7f-48dd-92fd-b4c08096e94d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminApiToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -222,7 +490,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/admin/users/10",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								"10"
+							]
 						}
 					},
 					"response": []
@@ -234,52 +510,186 @@
 			"item": [
 				{
 					"name": "RegisterUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cbac9dc6-2daa-4c9d-8708-4d996d3bc532",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"userId\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
-						"header": [],
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"username\": \"newusername\",\n\t\"password\": \"secret\"\n}"
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/admin/auth/signup",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"auth",
+								"signup"
+							]
 						}
 					},
 					"response": []
 				},
 				{
 					"name": "LoginUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7e461341-c51c-420b-b488-786771dcf4c8",
+								"exec": [
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"userApiToken\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
-						"header": [],
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"username\":\"newusername\", \n\t\"password\":\"secret\"\n}"
 						},
 						"url": {
-							"raw": ""
-						}
+							"raw": "{{BaseUrl}}/admin/auth/signin",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"auth",
+								"signin"
+							]
+						},
+						"description": "Получение токена авторизации в админке"
 					},
 					"response": []
 				},
 				{
 					"name": "CreateApiClient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "11a150be-964a-49cb-bc29-2bf15fa219cc",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"userClientId\", jsonData.clientId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
-						"header": [],
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"userId\": \"1\",\n\t\"clientId\": \"newclientid\",\n\t\"name\": \"newclientname\"\n}"
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/admin/clients/",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"clients",
+								""
+							]
 						}
 					},
 					"response": []
 				},
 				{
 					"name": "GenerateToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "77c27e3f-ce97-4918-91fc-80e87872ffca",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.environment.set(\"userClientApiToken\", pm.response.text());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userApiToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -287,7 +697,16 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/admin/auth/generate-token/{{userClientId}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"admin",
+								"auth",
+								"generate-token",
+								"{{userClientId}}"
+							]
 						}
 					},
 					"response": []
@@ -299,15 +718,57 @@
 			"item": [
 				{
 					"name": "CreateRecord",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "db165f4f-b19e-46a7-b97e-4db7d20c18fb",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"lastRecordCode\", jsonData.code);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
-						"header": [],
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userClientApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"text\": \"my first note\"\n}"
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/api/records/",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"records",
+								""
+							]
 						}
 					},
 					"response": []
@@ -329,22 +790,88 @@
 				},
 				{
 					"name": "CreateRecordWithPassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "db165f4f-b19e-46a7-b97e-4db7d20c18fb",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"lastRecordCode\", jsonData.code);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
-						"header": [],
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userClientApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"text\": \"my first encrypted note\",\n\t\"password\": \"secret\"\n}"
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/api/records/",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"records",
+								""
+							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "GetRecordWIthPassword",
+					"name": "GetRecordWithPassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1120c3ee-b444-44f5-a34d-07e76a67469e",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userClientApiToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -352,14 +879,52 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/api/records/{{lastRecordCode}}?password=secret",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"records",
+								"{{lastRecordCode}}"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "secret"
+								}
+							]
 						}
 					},
 					"response": []
 				},
 				{
 					"name": "GetRecordWithWrongPassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e8917b1f-2dc9-462c-95c1-90e710fd4f27",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userClientApiToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -367,14 +932,52 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/api/records/{{lastRecordCode}}?password=wrong_secret",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"records",
+								"{{lastRecordCode}}"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "wrong_secret"
+								}
+							]
 						}
 					},
 					"response": []
 				},
 				{
 					"name": "GetNonExistingRecord",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c5b9ce00-6127-4247-bc88-ad7fe0eb9ea6",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userClientApiToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -382,7 +985,15 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{BaseUrl}}/api/records/wrong_code",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"records",
+								"wrong_code"
+							]
 						}
 					},
 					"response": []
@@ -414,7 +1025,7 @@
 	],
 	"variable": [
 		{
-			"id": "5d128100-317b-4c53-bee4-2f40a3d87d5e",
+			"id": "9ee69aa7-0b88-4abd-9a14-5ec7b8dabf89",
 			"key": "BaseUrl",
 			"value": "http://localhost:8080",
 			"type": "string"

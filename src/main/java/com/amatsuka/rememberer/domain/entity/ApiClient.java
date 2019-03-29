@@ -35,9 +35,9 @@ public class ApiClient extends AbstractEntity implements UserDetails {
         this.createdAt = new Date();
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false)
+    @NonNull
+    private Long userId;
 
     public List<String> getRoles() {
         return asList("API_CLIENT");

@@ -15,4 +15,6 @@ public class ApiClientDto {
     private String name;
 
     private String clientId;
+
+    private Long userId;
 }
