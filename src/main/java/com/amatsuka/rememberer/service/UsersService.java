@@ -102,7 +102,8 @@ public class UsersService {
     public UserDto create(UserDto userDto) {
 
         if (userDto.getPasswordHash() == null) {
-            String password = faker.lorem().word();
+            //@TODO Костыль пока нету восстановления пароля
+            String password = "secret";
             userDto.setPasswordHash(passwordEncoder.encode(password));
         }
 
