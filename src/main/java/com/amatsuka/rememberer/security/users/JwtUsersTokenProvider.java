@@ -1,7 +1,7 @@
 package com.amatsuka.rememberer.security.users;
 
 import com.amatsuka.rememberer.security.InvalidJwtAuthenticationException;
-import com.amatsuka.rememberer.services.CustomUserDetailsService;
+import com.amatsuka.rememberer.service.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
