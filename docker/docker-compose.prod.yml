@@ -20,7 +20,7 @@ services:
 
   tomcat:
     build:
-      context: ./docker/tomcat
+      context: ./tomcat
       dockerfile: Dockerfile
     restart: always
     working_dir: /usr/local/tomcat/webapps

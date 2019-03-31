@@ -26,6 +26,22 @@ dev.clean-db:
 
 dev.run-env:
 	docker-compose -f docker/docker-compose.dev.yml up -d
+	sh waitformysql.sh 3306
 
 dev.stop-env:
 	docker-compose -f docker/docker-compose.dev.yml down
+
+dev.build:
+	mvn war:war
+
+dev.deploy:
+	sh ~/tomcat/bin/catalina.sh stop
+	cp ./target/rememberer-0.0.1-SNAPSHOT.war ~/tomcat/webapps/rememberer.war
+	sh ~/tomcat/bin/catalina.sh run
+
+dev.stop-server:
+	sh ~/tomcat/bin/catalina.sh stop
+
+dev.start-app: dev.run-env dev.clean-db dev.build dev.deploy
+
+dev.stop-app: dev.stop-server dev.stop-env

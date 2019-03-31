@@ -1,3 +1,3 @@
 FROM tomcat:9.0
-COPY ../../target/*.war /usr/local/tomcat/webapps/
+COPY ./rememberer.war /usr/local/tomcat/webapps/rememberer.war
 CMD ["catalina.sh", "run"]
