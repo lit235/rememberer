@@ -52,7 +52,11 @@ public class RecordsControllerTest extends BaseTest {
 
     @Before
     public void beforeTest() {
-        ApiClientDto apiClientDto = ApiClientDto.builder().clientId("testclientid").name("testclient").build();
+        ApiClientDto apiClientDto = ApiClientDto.builder()
+                .clientId("testclientid")
+                .name("testclient")
+                .userId(1L)
+                .build();
         apiClientDto = apiClientsService.create(apiClientDto);
 
         apiToken = apiClientsService.generateToken(apiClientDto);
@@ -76,7 +80,7 @@ public class RecordsControllerTest extends BaseTest {
 
         ResultActions response = this.mvc.perform(request);
 
-        response.andExpect(status().isOk()).andExpect(jsonPath("$.text", is("test text")));
+        response.andExpect(status().isCreated()).andExpect(jsonPath("$.text", is("test text")));
     }
 
     @Test
@@ -121,7 +125,7 @@ public class RecordsControllerTest extends BaseTest {
 
         ResultActions response = this.mvc.perform(request);
 
-        response.andExpect(status().isOk())
+        response.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.text", is(encryptedRecord.getText())))
                 .andExpect(jsonPath("$.passwordHash", is(encryptedRecord.getPasswordHash())));
     }

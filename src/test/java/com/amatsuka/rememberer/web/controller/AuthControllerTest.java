@@ -118,7 +118,12 @@ public class AuthControllerTest extends BaseTest {
 
         String apiToken = usersService.generateToken(userDto.orElseThrow(() -> new UsernameNotFoundException("Username not found")));
 
-        ApiClientDto apiClientDto = ApiClientDto.builder().clientId("testclientid").name("testclient").build();
+        ApiClientDto apiClientDto = ApiClientDto.builder()
+                .clientId("testclientid")
+                .name("testclient")
+                .userId(userDto.get().getId())
+                .build();
+
         apiClientDto = apiClientsService.create(apiClientDto);
 
         MockHttpServletRequestBuilder request = get("/admin/auth/generate-token/" + apiClientDto.getClientId())
