@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 HOST="localhost"
 PORT="$1"
 USER="rememberer"

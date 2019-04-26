@@ -13,6 +13,8 @@ import static java.util.Arrays.asList;
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "api_clients")
 public class ApiClient extends AbstractEntity implements UserDetails {
 
@@ -25,19 +27,17 @@ public class ApiClient extends AbstractEntity implements UserDetails {
     private String clientId;
 
     @Column(nullable = false)
-    private Date createdAt;
+    @Builder.Default
+    private Date createdAt = null;
 
     @Column
-    private Date loginAt;
+    @Builder.Default
+    private Date loginAt = null;
 
     @PrePersist
     void createdAt() {
         this.createdAt = new Date();
     }
-
-    @Column(nullable = false)
-    @NonNull
-    private Long userId;
 
     public List<String> getRoles() {
         return asList("API_CLIENT");
@@ -79,4 +79,9 @@ public class ApiClient extends AbstractEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @Builder.Default
+    private User user = null;
 }

@@ -14,6 +14,8 @@ import static java.util.Arrays.asList;
 @EqualsAndHashCode(exclude = "apiClients")
 @RequiredArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "users")
 public class User extends AbstractEntity implements UserDetails {
 
@@ -29,10 +31,12 @@ public class User extends AbstractEntity implements UserDetails {
     private String passwordHash;
 
     @Column(nullable = false)
-    private Date createdAt;
+    @Builder.Default
+    private Date createdAt = null;
 
     @Column
-    private Date loginAt;
+    @Builder.Default
+    private Date loginAt = null;
 
     @PrePersist
     void createdAt() {
@@ -79,4 +83,8 @@ public class User extends AbstractEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<ApiClient> apiClients = new HashSet<>();
 }
